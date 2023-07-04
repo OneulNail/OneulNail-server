@@ -27,13 +27,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         HttpServletRequest httpServletRequest = (HttpServletRequest)servletRequest;
         String token = jwtTokenProvider.resolveToken(servletRequest);
         String requestURI = httpServletRequest.getRequestURI();
-        LOGGER.info("[doFilterInternal] token 값 추출 완료. token : {}", token);
 
-        LOGGER.info("[doFilterInternal] token 값 유효성 체크 시작");
         if (token != null && jwtTokenProvider.validateToken(token)) {
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            LOGGER.info("[doFilterInternal] token 값 유효성 체크 완료");
             LOGGER.info("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
         }
         else {
