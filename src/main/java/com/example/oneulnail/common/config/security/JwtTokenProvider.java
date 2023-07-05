@@ -47,7 +47,6 @@ public class JwtTokenProvider {
 //     SecretKey 에 대해 인코딩
     @PostConstruct
     protected void init() {
-        LOGGER.info("[init] JwtTokenProvider 내 secretKey 초기화 시작");
         System.out.println(secretKey);
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes(StandardCharsets.UTF_8));
         System.out.println(secretKey);
@@ -73,7 +72,6 @@ public class JwtTokenProvider {
 
     // JWT 토큰으로 인증 정보 조회
     public Authentication getAuthentication(String token) {
-        LOGGER.info("[getAuthentication] 토큰 인증 정보 조회 시작");
         UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUsername(token));
         LOGGER.info("[getAuthentication] 토큰 인증 정보 조회 완료, UserDetails UserName : {}",
                 userDetails.getUsername());
@@ -83,7 +81,6 @@ public class JwtTokenProvider {
 
     // JWT 토큰에서 회원 구별 정보 추출
     public String getUsername(String token) {
-        LOGGER.info("[getUsername] 토큰 기반 회원 구별 정보 추출");
         String info = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody()
                 .getSubject();
         LOGGER.info("[getUsername] 토큰 기반 회원 구별 정보 추출 완료, info : {}", info);

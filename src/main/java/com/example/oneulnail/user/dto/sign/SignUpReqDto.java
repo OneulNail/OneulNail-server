@@ -1,4 +1,4 @@
-package com.example.oneulnail.dto.sign;
+package com.example.oneulnail.user.dto.sign;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,6 +1,7 @@
-package com.example.oneulnail.dto.sign;
+package com.example.oneulnail.user.dto.sign;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -9,12 +10,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class SignUpResDto {
+@Builder
+public class SignInReqDto {
 
-    private boolean success;
+    private String id;
 
-    private String code;
-
-    private String msg;
+    private String password;
 
 }
