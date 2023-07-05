@@ -1,4 +1,4 @@
-package com.example.oneulnail.entity;
+package com.example.oneulnail.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -35,6 +35,9 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private String name;
+
+//    @Column(nullable = false)
+//    private String phoneNum;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default

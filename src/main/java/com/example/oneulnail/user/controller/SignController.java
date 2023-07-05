@@ -1,14 +1,11 @@
-package com.example.oneulnail.controller;
+package com.example.oneulnail.user.controller;
 
 import com.example.oneulnail.common.config.security.JwtTokenProvider;
 import com.example.oneulnail.common.entity.BaseResponse;
 import com.example.oneulnail.common.exception.BaseException;
-import com.example.oneulnail.common.exception.UnauthorizedException;
-import com.example.oneulnail.dto.sign.SignInResDto;
-import com.example.oneulnail.dto.sign.SignUpResDto;
-import com.example.oneulnail.entity.User;
-import com.example.oneulnail.service.SignService;
-import io.swagger.annotations.ApiImplicitParam;
+import com.example.oneulnail.user.dto.sign.SignInResDto;
+import com.example.oneulnail.user.dto.sign.SignUpResDto;
+import com.example.oneulnail.user.service.SignService;
 import io.swagger.annotations.ApiParam;
 import java.util.HashMap;
 import java.util.Map;

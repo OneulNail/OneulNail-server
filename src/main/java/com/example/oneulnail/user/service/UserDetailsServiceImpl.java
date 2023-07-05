@@ -1,6 +1,6 @@
-package com.example.oneulnail.service;
+package com.example.oneulnail.user.service;
 
-import com.example.oneulnail.repository.UserRepository;
+import com.example.oneulnail.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

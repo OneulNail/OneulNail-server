@@ -1,6 +1,6 @@
-package com.example.oneulnail.repository;
+package com.example.oneulnail.user.repository;
 
-import com.example.oneulnail.entity.User;
+import com.example.oneulnail.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

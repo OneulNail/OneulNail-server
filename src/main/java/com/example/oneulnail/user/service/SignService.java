@@ -1,14 +1,14 @@
-package com.example.oneulnail.service;
+package com.example.oneulnail.user.service;
 
 
 import com.example.oneulnail.common.config.security.JwtTokenProvider;
 import com.example.oneulnail.common.entity.BaseResponse;
-import com.example.oneulnail.dto.sign.SignInResDto;
-import com.example.oneulnail.dto.sign.SignUpResDto;
+import com.example.oneulnail.user.dto.sign.SignInResDto;
+import com.example.oneulnail.user.dto.sign.SignUpResDto;
 
 // 예제 13.24
-import com.example.oneulnail.entity.User;
-import com.example.oneulnail.repository.UserRepository;
+import com.example.oneulnail.user.entity.User;
+import com.example.oneulnail.user.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +66,6 @@ public class SignService {
 
     public SignInResDto signIn(String id, String password) throws RuntimeException {
         User user = userRepository.getByUid(id);
-        LOGGER.info("[getSignInResult] Id : {}", id);
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException();

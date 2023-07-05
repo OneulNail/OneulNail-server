@@ -1,7 +1,7 @@
-package com.example.oneulnail.controller;
+package com.example.oneulnail.user.controller;
 
 import com.example.oneulnail.common.entity.BaseResponse;
-import com.example.oneulnail.entity.User;
+import com.example.oneulnail.user.entity.User;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
