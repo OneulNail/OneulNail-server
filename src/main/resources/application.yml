@@ -43,4 +43,4 @@ server:
 
 springboot:
   jwt:
-    secret: flature!@#
+    secret: oneulnailTokenKey1234567890qwertyasdfgWHDGKQTJFRPVMFHWPRXMwhdgkqtjfrPvmfhwprxm

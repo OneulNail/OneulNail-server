@@ -12,8 +12,8 @@ public class SignInResDto extends SignUpResDto{
     private String token;
 
     @Builder
-    public SignInResDto(boolean success, String code, String msg, String token) {
-        super(success, code, msg);
+    public SignInResDto(String msg, String token) {
+        super(msg);
         this.token = token;
     }
 }

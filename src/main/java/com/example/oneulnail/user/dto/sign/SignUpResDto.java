@@ -11,10 +11,6 @@ import lombok.ToString;
 @ToString
 public class SignUpResDto {
 
-    private boolean success;
-
-    private String code;
-
     private String msg;
 
 }

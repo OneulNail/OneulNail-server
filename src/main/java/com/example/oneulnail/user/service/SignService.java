@@ -33,69 +33,50 @@ public class SignService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public SignUpResDto signUp(String id, String password, String name, String role) {
+    public SignUpResDto signUp(String phone_num, String password, String name, String role) {
         User user;
         if (role.equalsIgnoreCase("admin")) {
             user = User.builder()
-                    .uid(id)
+                    .phoneNum(phone_num)
                     .name(name)
                     .password(passwordEncoder.encode(password))
-                    .roles(Collections.singletonList("ROLE_ADMIN"))
+                    .role("ADMIN")
                     .build();
         } else {
             user = User.builder()
-                    .uid(id)
+                    .phoneNum(phone_num)
                     .name(name)
                     .password(passwordEncoder.encode(password))
-                    .roles(Collections.singletonList("ROLE_USER"))
+                    .role("USER")
                     .build();
         }
 
         User savedUser = userRepository.save(user);
-        SignUpResDto signUpResDto = new SignInResDto();
+        SignUpResDto signUpResDto = new SignUpResDto();
 
         if (!savedUser.getName().isEmpty()) {
-            LOGGER.info("[getSignUpResult] 정상 처리 완료");
-            setSuccessResult(signUpResDto);
+            signUpResDto.setMsg("회원가입이 완료되었습니다.");
         } else {
-            LOGGER.info("[getSignUpResult] 실패 처리 완료");
-            setFailResult(signUpResDto);
+            signUpResDto.setMsg("회원가입 실패");
         }
         return signUpResDto;
     }
 
-    public SignInResDto signIn(String id, String password) throws RuntimeException {
-        User user = userRepository.getByUid(id);
+    public SignInResDto signIn(String phone_num, String password) throws RuntimeException {
+        User user = userRepository.getByPhoneNum(phone_num);
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException();
         }
-        LOGGER.info("[getSignInResult] 패스워드 일치");
 
         SignInResDto signInResDto = SignInResDto.builder()
-                .token(jwtTokenProvider.createToken(String.valueOf(user.getUid()),
-                        user.getRoles()))
+                .token(jwtTokenProvider.createToken(String.valueOf(user.getPhoneNum()),
+                        user.getRole()))
                 .build();
 
-        setSuccessResult(signInResDto);
+        signInResDto.setMsg("로그인에 성공하였습니다.");
 
         return signInResDto;
     }
 
-    // 결과 모델에 api 요청 성공
-    private void setSuccessResult(SignUpResDto result) {
-        result.setSuccess(true);
-        result.setCode("1");
-//        result.setMsg(BaseResponse.SUCCESS.getMsg());
-        BaseResponse.onSuccess("성공");
-    }
-
-    // 결과 모델에 api 요청 실패
-    private void setFailResult(SignUpResDto result) {
-        result.setSuccess(false);
-        result.setCode("0");
-//        result.setMsg(CommonResponse.FAIL.getMsg());
-//        BaseResponse.onFailure('4','t',result);
-        BaseResponse.onSuccess("실패");
-    }
 }
