@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,13 +33,9 @@ public class User implements UserDetails {
     @Column(name = "role")
     private String role;
 
-//    @Column(nullable = false,unique = true)
-//    private String uid;
-
     @JsonProperty(access = Access.WRITE_ONLY) // Json 결과로 출력하지 않을 데이터에 대해 해당 어노테이션 설정 값 추가
     @Column(nullable = false)
     private String password;
-
 
     @Column(name = "phone_num",nullable = false,unique = true)
     private String phoneNum;
@@ -46,13 +43,9 @@ public class User implements UserDetails {
     @Column(name = "status")
     private String status;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
-    private List<String> roles = new ArrayList<>();
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        return Collections.singleton(new SimpleGrantedAuthority(role));
     }
 
     @JsonProperty(access = Access.WRITE_ONLY)
@@ -92,4 +85,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }
