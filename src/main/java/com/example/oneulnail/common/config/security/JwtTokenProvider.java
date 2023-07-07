@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
-import java.util.List;
 
 /**
  * JWT 토큰을 생성하고 유효성을 검증하는 컴포넌트 클래스 JWT 는 여러 암호화 알고리즘을 제공하고 알고리즘과 비밀키를 가지고 토큰을 생성
@@ -54,9 +53,9 @@ public class JwtTokenProvider {
     }
 
     // JWT 토큰 생성
-    public String createToken(String user_id, List<String> roles) {
-        Claims claims = Jwts.claims().setSubject(user_id);
-        claims.put("roles", roles);
+    public String createToken(String phone_num, String role) {
+        Claims claims = Jwts.claims().setSubject(phone_num);
+        claims.put("role", role);
 
         Date now = new Date();
         String token = Jwts.builder()
@@ -83,7 +82,7 @@ public class JwtTokenProvider {
     public String getUsername(String token) {
         String info = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody()
                 .getSubject();
-        LOGGER.info("[getUsername] 토큰 기반 회원 구별 정보 추출 완료, info : {}", info);
+        LOGGER.info("토큰 기반 회원 구별 정보 추출 완료, info : {}", info);
         return info;
     }
 
@@ -95,19 +94,17 @@ public class JwtTokenProvider {
      * @return String type Token 값
      */
     public String resolveToken(HttpServletRequest request) {
-        LOGGER.info("[resolveToken] HTTP 헤더에서 Token 값 추출");
         return request.getHeader("X-AUTH-TOKEN");
     }
 
     // JWT 토큰의 유효성 + 만료일 체크
     public boolean validateToken(String token) {
-        LOGGER.info("[validateToken] 토큰 유효 체크 시작");
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-            LOGGER.info("[validateToken] 토큰 유효 체크 완료");
+            LOGGER.info("토큰 유효 체크 완료");
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
-            LOGGER.info("[validateToken] 토큰 유효 체크 예외 발생");
+            LOGGER.info("토큰 유효 체크 예외 발생");
             return false;
         }
     }

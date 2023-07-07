@@ -1,27 +1,23 @@
 spring:
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-    datasource:
-      url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1
-      driver-class-name: org.h2.Driver
-      username: sa
-      password:
-    jpa:
-      show-sql: true
+  datasource:
+    url: jdbc:h2:mem:testdb  # H2 in-memory database URL
+    driver-class-name: org.h2.Driver
+    username: sa             # Default username
+    password:                # Default password
+  jpa:
+#      show-sql: true
+    hibernate:
+      ddl-auto: create
+        # create, update, create-drop, none 등의 옵션이 있습니다.
+        #        # create: 기존테이블 삭제 후 다시 생성
+        #        # update: 변경된 부분만 반영
+        #        # create-drop: create와 같으나 종료 시점에 테이블 DROP
+        #        # none: 사용하지 않음
+    properties:
       hibernate:
-        ddl-auto: create
-          # create, update, create-drop, none 등의 옵션이 있습니다.
-          #        # create: 기존테이블 삭제 후 다시 생성
-          #        # update: 변경된 부분만 반영
-          #        # create-drop: create와 같으나 종료 시점에 테이블 DROP
-          #        # none: 사용하지 않음
-      properties:
-        hibernate:
-          format_sql: true
-          dialect: org.hibernate.dialect.H2Dialect
-          default_batch_fetch_size: 1000
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+        default_batch_fetch_size: 1000
 
   # file upload max size
   servlet:
@@ -33,7 +29,6 @@ spring:
     timeZone: Asia/Seoul
     dateFormat: yyyy-MM-dd HH:mm:ss
 
-
 server:
   servlet:
     encoding:
@@ -43,4 +38,8 @@ server:
 
 springboot:
   jwt:
-    secret: flature!@#
+    secret: oneulnailTokenKey1234567890qwertyasdfgWHDGKQTJFRPVMFHWPRXMwhdgkqtjfrPvmfhwprxm
+
+logging:
+  level:
+    org.hibernate.SQL: debug

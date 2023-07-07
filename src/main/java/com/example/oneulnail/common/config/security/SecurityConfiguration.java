@@ -62,11 +62,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/**").permitAll()
 
-//                .antMatchers("/swagger-resources/**").permitAll()
-//                .antMatchers("/swagger-ui/**").permitAll()
-//                .antMatchers("/webjars/**").permitAll()
-//                .antMatchers("/v3/api-docs").permitAll()
-//                .antMatchers("/image/**").permitAll()
+                .antMatchers("/swagger-resources/**").permitAll()
+                .antMatchers("/swagger-ui/**").permitAll()
+                .antMatchers("/webjars/**").permitAll()
+                .antMatchers("/v3/api-docs").permitAll()
+                .antMatchers("/image/**").permitAll()
 //                .antMatchers("/user/sign-in", "/user/sign-up",
 //                        "/user/exception").permitAll() // 가입 및 로그인 주소는 허용
 //                .antMatchers(HttpMethod.GET, "/test").permitAll() // product로 시작하는 Get 요청은 허용

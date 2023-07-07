@@ -40,12 +40,11 @@ public class SignController {
 
     @PostMapping(value = "/sign-in")
     public BaseResponse<SignInResDto> signIn(
-            @ApiParam(value = "ID", required = true) @RequestParam String id,
+            @ApiParam(value = "PhoneNum", required = true) @RequestParam String phone_num,
             @ApiParam(value = "Password", required = true) @RequestParam String password)
             throws RuntimeException {
-        LOGGER.info("로그인을 시도하고 있습니다. id : {}, pw : ****", id);
-        SignInResDto signInResDto = signService.signIn(id, password);
-        if(id==null) throw new BaseException(USERS_EMPTY_USER_ID);
+        SignInResDto signInResDto = signService.signIn(phone_num, password);
+        if(phone_num==null) throw new BaseException(USERS_EMPTY_USER_PHONE_NUMBER);
 
         if(password==null)throw new BaseException(USERS_EMPTY_USER_PASSWORD);
         return BaseResponse.onSuccess(signInResDto);
@@ -53,13 +52,13 @@ public class SignController {
 
     @PostMapping(value = "/sign-up")
     public BaseResponse<SignUpResDto> signUp(
-            @ApiParam(value = "ID", required = true) @RequestParam String id,
+            @ApiParam(value = "전화번호", required = true) @RequestParam String phone_num,
             @ApiParam(value = "비밀번호", required = true) @RequestParam String password,
             @ApiParam(value = "이름", required = true) @RequestParam String name,
             @ApiParam(value = "권한", required = true) @RequestParam String role) {
-        SignUpResDto signUpResDto = signService.signUp(id, password, name, role);
+        SignUpResDto signUpResDto = signService.signUp(phone_num, password, name, role);
 
-        LOGGER.info("회원가입을 완료. id : {}", id);
+        LOGGER.info("회원가입을 완료. 전화번호 : {}", phone_num);
         return BaseResponse.onSuccess(signUpResDto);
     }
 
