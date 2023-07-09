@@ -1,6 +1,7 @@
 package com.example.oneulnail.user.controller;
 
 import com.example.oneulnail.common.config.security.JwtTokenProvider;
+import com.example.oneulnail.common.config.security.oauth2.Role;
 import com.example.oneulnail.common.entity.BaseResponse;
 import com.example.oneulnail.common.exception.BaseException;
 import com.example.oneulnail.user.dto.sign.SignInResDto;
@@ -55,8 +56,8 @@ public class SignController {
             @ApiParam(value = "전화번호", required = true) @RequestParam String phone_num,
             @ApiParam(value = "비밀번호", required = true) @RequestParam String password,
             @ApiParam(value = "이름", required = true) @RequestParam String name,
-            @ApiParam(value = "권한", required = true) @RequestParam String role) {
-        SignUpResDto signUpResDto = signService.signUp(phone_num, password, name, role);
+            @ApiParam(value = "권한", required = true) @RequestParam Role role) {
+        SignUpResDto signUpResDto = signService.signUp(id, password, name, role);
 
         LOGGER.info("회원가입을 완료. 전화번호 : {}", phone_num);
         return BaseResponse.onSuccess(signUpResDto);

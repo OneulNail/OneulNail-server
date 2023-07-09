@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -43,7 +44,7 @@ public class JwtTokenProvider {
     private final long tokenValidMillisecond = 1000L * 60 * 60; // 1시간 토큰 유효
 
 
-//     SecretKey 에 대해 인코딩
+    //     SecretKey 에 대해 인코딩
     @PostConstruct
     protected void init() {
         System.out.println(secretKey);

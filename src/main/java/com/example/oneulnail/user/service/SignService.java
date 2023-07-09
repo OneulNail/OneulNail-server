@@ -2,6 +2,7 @@ package com.example.oneulnail.user.service;
 
 
 import com.example.oneulnail.common.config.security.JwtTokenProvider;
+import com.example.oneulnail.common.config.security.oauth2.Role;
 import com.example.oneulnail.common.entity.BaseResponse;
 import com.example.oneulnail.user.dto.sign.SignInResDto;
 import com.example.oneulnail.user.dto.sign.SignUpResDto;
@@ -33,21 +34,21 @@ public class SignService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public SignUpResDto signUp(String phone_num, String password, String name, String role) {
+    public SignUpResDto signUp(String phone_num, String password, String name, Role role) {
         User user;
-        if (role.equalsIgnoreCase("admin")) {
+        if (role.getKey().equals("ROLE_ADMIN")) {
             user = User.builder()
                     .phoneNum(phone_num)
                     .name(name)
                     .password(passwordEncoder.encode(password))
-                    .role("ADMIN")
+                    .role(role)
                     .build();
         } else {
             user = User.builder()
                     .phoneNum(phone_num)
                     .name(name)
                     .password(passwordEncoder.encode(password))
-                    .role("USER")
+                    .role(role)
                     .build();
         }
 
@@ -71,7 +72,7 @@ public class SignService {
 
         SignInResDto signInResDto = SignInResDto.builder()
                 .token(jwtTokenProvider.createToken(String.valueOf(user.getPhoneNum()),
-                        user.getRole()))
+                        user.getRole().toString()))
                 .build();
 
         signInResDto.setMsg("로그인에 성공하였습니다.");
