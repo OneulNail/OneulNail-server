@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -44,7 +45,7 @@ public class JwtTokenProvider {
     private final long tokenValidMillisecond = 1000L * 60 * 60; // 1시간 토큰 유효
 
 
-//     SecretKey 에 대해 인코딩
+    //     SecretKey 에 대해 인코딩
     @PostConstruct
     protected void init() {
         System.out.println(secretKey);
@@ -54,9 +55,9 @@ public class JwtTokenProvider {
     }
 
     // JWT 토큰 생성
-    public String createToken(String user_id, List<String> roles) {
-        Claims claims = Jwts.claims().setSubject(user_id);
-        claims.put("roles", roles);
+    public String createToken(String phone_num, String role) {
+        Claims claims = Jwts.claims().setSubject(phone_num);
+        claims.put("role", role);
 
         Date now = new Date();
         String token = Jwts.builder()
@@ -83,7 +84,7 @@ public class JwtTokenProvider {
     public String getUsername(String token) {
         String info = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody()
                 .getSubject();
-        LOGGER.info("[getUsername] 토큰 기반 회원 구별 정보 추출 완료, info : {}", info);
+        LOGGER.info("토큰 기반 회원 구별 정보 추출 완료, info : {}", info);
         return info;
     }
 
@@ -95,19 +96,17 @@ public class JwtTokenProvider {
      * @return String type Token 값
      */
     public String resolveToken(HttpServletRequest request) {
-        LOGGER.info("[resolveToken] HTTP 헤더에서 Token 값 추출");
         return request.getHeader("X-AUTH-TOKEN");
     }
 
     // JWT 토큰의 유효성 + 만료일 체크
     public boolean validateToken(String token) {
-        LOGGER.info("[validateToken] 토큰 유효 체크 시작");
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-            LOGGER.info("[validateToken] 토큰 유효 체크 완료");
+            LOGGER.info("토큰 유효 체크 완료");
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
-            LOGGER.info("[validateToken] 토큰 유효 체크 예외 발생");
+            LOGGER.info("토큰 유효 체크 예외 발생");
             return false;
         }
     }
