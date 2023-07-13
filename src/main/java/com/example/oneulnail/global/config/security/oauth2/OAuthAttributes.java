@@ -73,7 +73,7 @@ public class OAuthAttributes {
                 .name(oauth2UserInfo.getName())
                 .imageUrl(oauth2UserInfo.getImageUrl())
                 .role(Role.GUEST)
-                .status(Status.Enabled)
+                .status(Status.ENABLED)
                 .build();
     }
 }
