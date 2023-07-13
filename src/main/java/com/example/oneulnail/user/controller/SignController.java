@@ -57,7 +57,7 @@ public class SignController {
             @ApiParam(value = "비밀번호", required = true) @RequestParam String password,
             @ApiParam(value = "이름", required = true) @RequestParam String name,
             @ApiParam(value = "권한", required = true) @RequestParam Role role) {
-        SignUpResDto signUpResDto = signService.signUp(id, password, name, role);
+        SignUpResDto signUpResDto = signService.signUp(phone_num, password, name, role);
 
         LOGGER.info("회원가입을 완료. 전화번호 : {}", phone_num);
         return BaseResponse.onSuccess(signUpResDto);

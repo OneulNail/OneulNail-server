@@ -39,10 +39,10 @@ public class User implements UserDetails {
     private String imageUrl; // 프로필 이미지
 
     @JsonProperty(access = Access.WRITE_ONLY) // Json 결과로 출력하지 않을 데이터에 대해 해당 어노테이션 설정 값 추가
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String password;
 
-    @Column(name = "phone_num",nullable = false,unique = true)
+    @Column(name = "phone_num",nullable = true,unique = true)
     private String phoneNum;
 
     @Column(name = "status")
@@ -63,6 +63,11 @@ public class User implements UserDetails {
     // 비밀번호 암호화 메소드
     public void passwordEncode(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(this.password);
+    }
+
+    public void oAuth2SignUp(String phoneNum, String name) {
+        this.phoneNum = phoneNum;
+        this.name = name;
     }
 
     public void updateRefreshToken(String updateRefreshToken) {
