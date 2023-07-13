@@ -1,29 +1,33 @@
-package com.example.oneulnail.user.controller;
+package com.example.oneulnail.domain.user.controller;
 
-import com.example.oneulnail.common.config.security.JwtTokenProvider;
-import com.example.oneulnail.common.config.security.oauth2.Role;
-import com.example.oneulnail.common.entity.BaseResponse;
-import com.example.oneulnail.common.exception.BaseException;
-import com.example.oneulnail.user.dto.sign.SignInResDto;
-import com.example.oneulnail.user.dto.sign.SignUpResDto;
-import com.example.oneulnail.user.service.SignService;
+import com.example.oneulnail.domain.user.dto.request.SignInReqDto;
+import com.example.oneulnail.domain.user.dto.request.SignUpReqDto;
+import com.example.oneulnail.domain.user.dto.response.SignInResDto;
+import com.example.oneulnail.domain.user.dto.response.SignMessageResDto;
+import com.example.oneulnail.domain.user.dto.response.SignUpResDto;
+import com.example.oneulnail.global.config.security.JwtTokenProvider;
+import com.example.oneulnail.global.entity.BaseResponse;
+import com.example.oneulnail.global.exception.BaseException;
+import com.example.oneulnail.domain.user.service.SignService;
 import io.swagger.annotations.ApiParam;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
+
+import net.nurigo.sdk.NurigoApp;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
+import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import static com.example.oneulnail.common.constants.BaseResponseStatus.*;
+import static com.example.oneulnail.global.constants.BaseResponseStatus.*;
 
 @RestController
 @RequestMapping("/user")
@@ -87,27 +91,6 @@ public class SignController {
         signMessageResDto.setAuthenticationNumber(numStr);
 
         return BaseResponse.onSuccess(signMessageResDto);
-    }
-
-    @GetMapping(value = "/exception")
-    public void exceptionTest() throws RuntimeException {
-        throw new RuntimeException("접근이 금지되었습니다.");
-    }
-
-    @ExceptionHandler(value = RuntimeException.class)
-    public ResponseEntity<Map<String, String>> ExceptionHandler(RuntimeException e) {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        //responseHeaders.add(HttpHeaders.CONTENT_TYPE, "application/json");
-        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-
-        LOGGER.error("ExceptionHandler 호출, {}, {}", e.getCause(), e.getMessage());
-
-        Map<String, String> map = new HashMap<>();
-        map.put("error type", httpStatus.getReasonPhrase());
-        map.put("code", "400");
-        map.put("message", "에러 발생");
-
-        return new ResponseEntity<>(map, responseHeaders, httpStatus);
     }
 
 }

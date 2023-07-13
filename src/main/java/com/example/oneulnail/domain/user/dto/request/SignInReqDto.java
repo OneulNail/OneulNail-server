@@ -1,6 +1,5 @@
-package com.example.oneulnail.domain.user.dto.sign;
+package com.example.oneulnail.domain.user.dto.request;
 
-import com.example.oneulnail.common.config.security.oauth2.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,14 +10,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SignUpReqDto {
+public class SignInReqDto {
 
     private String phone_num;
 
     private String password;
-
-    private String name;
-
-    private Role role;
 
 }

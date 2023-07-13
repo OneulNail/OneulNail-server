@@ -1,8 +1,8 @@
 package com.example.oneulnail.domain.user.service;
 
 
-import com.example.oneulnail.domain.user.dto.sign.SignInResDto;
-import com.example.oneulnail.domain.user.dto.sign.SignUpResDto;
+import com.example.oneulnail.domain.user.dto.response.SignInResDto;
+import com.example.oneulnail.domain.user.dto.response.SignUpResDto;
 import com.example.oneulnail.domain.user.entity.User;
 import com.example.oneulnail.domain.user.repository.UserRepository;
 import com.example.oneulnail.global.config.security.JwtTokenProvider;

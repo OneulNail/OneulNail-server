@@ -1,4 +1,4 @@
-package com.example.oneulnail.user.dto.sign;
+package com.example.oneulnail.domain.user.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +8,9 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignMessageResDto {
-    private String authenticationNumber;
+@ToString
+public class SignUpResDto {
+
+    private String msg;
+
 }
