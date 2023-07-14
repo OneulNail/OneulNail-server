@@ -47,6 +47,9 @@ dependencies {
 
 	// OAuth2
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	// SMS 인증번호
+	implementation 'net.nurigo:sdk:4.3.0'
 }
 
 tasks.named('test') {

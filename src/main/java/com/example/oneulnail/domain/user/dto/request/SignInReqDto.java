@@ -1,4 +1,4 @@
-package com.example.oneulnail.domain.user.dto.sign;
+package com.example.oneulnail.domain.user.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +9,10 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Builder
 public class SignInReqDto {
 
-    private String id;
+    private String phone_num;
 
     private String password;
 

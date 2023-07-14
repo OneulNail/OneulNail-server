@@ -1,4 +1,4 @@
-package com.example.oneulnail.domain.user.dto.sign;
+package com.example.oneulnail.domain.user.dto.response;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @Builder
-public class SignInResDto extends SignUpResDto{
+public class SignInResDto extends SignUpResDto {
 
     private String token;
 
