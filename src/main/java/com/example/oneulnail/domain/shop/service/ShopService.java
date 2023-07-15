@@ -1,6 +1,7 @@
 package com.example.oneulnail.domain.shop.service;
 
 import com.example.oneulnail.domain.shop.dto.request.ShopRegisterReqDto;
+import com.example.oneulnail.domain.shop.dto.response.ShopListResDto;
 import com.example.oneulnail.domain.shop.dto.response.ShopFindOneResDto;
 import com.example.oneulnail.domain.shop.dto.response.ShopRegisterResDto;
 import com.example.oneulnail.domain.shop.entity.Shop;
@@ -8,6 +9,8 @@ import com.example.oneulnail.domain.shop.mapper.ShopMapper;
 import com.example.oneulnail.domain.shop.repository.ShopRepository;
 import com.example.oneulnail.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -45,4 +48,10 @@ public class ShopService {
                 .orElseThrow(() -> new NotFoundException("Shop not found"));
         return shopMapper.shopFindOneEntityToDto(foundShop);
     }
+
+    public Slice<ShopListResDto> findAll(Pageable pageable) {
+        Slice<Shop> shops = shopRepository.findAllSlice(pageable);
+        return shops.map(shop -> shopMapper.entityToShopListResDto(shop));
+    }
+
 }
