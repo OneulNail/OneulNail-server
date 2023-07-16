@@ -1,18 +1,12 @@
 package com.example.oneulnail.like_style.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.Builder;
+import lombok.Getter;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Getter
+@Builder
+public class LikeStyleRegisterResDto {
 
-public class LikeStyleResDto {
-    private Long id;
-    private String style1;
-    private String style2;
-    private String style3;
+    private String msg;
+
 }
