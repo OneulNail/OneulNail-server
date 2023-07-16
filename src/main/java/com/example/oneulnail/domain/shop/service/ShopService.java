@@ -43,9 +43,13 @@ public class ShopService {
         return shopMapper.ShopRegisterEntityToDto(registeredShop);
     }
 
-    public ShopFindOneResDto findById(Long shopId) {
-        Shop foundShop = shopRepository.findById(shopId)
+    public Shop findById(Long shopId) {
+        return shopRepository.findById(shopId)
                 .orElseThrow(() -> new NotFoundException("Shop not found"));
+    }
+
+    public ShopFindOneResDto findDtoById(Long shopId) {
+        Shop foundShop = findById(shopId);
         return shopMapper.shopFindOneEntityToDto(foundShop);
     }
 

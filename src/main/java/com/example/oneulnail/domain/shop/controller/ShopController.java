@@ -27,7 +27,7 @@ public class ShopController {
 
     @GetMapping("/{shopId}")
     public BaseResponse<ShopFindOneResDto> findByShopId(@PathVariable Long shopId) {
-        ShopFindOneResDto shopFindOneResDto = shopService.findById(shopId);
+        ShopFindOneResDto shopFindOneResDto = shopService.findDtoById(shopId);
         return BaseResponse.onSuccess(shopFindOneResDto);
     }
 

@@ -1,4 +1,4 @@
-package com.example.oneulnail.like_style.entity;
+package com.example.oneulnail.domain.like_style.entity;
 
 import com.example.oneulnail.domain.user.entity.User;
 import com.example.oneulnail.global.entity.BaseEntity;
@@ -37,7 +37,4 @@ public class LikeStyle extends BaseEntity {
         this.style2 = style2;
         this.style3 = style3;
     }
-
-
-
 }
