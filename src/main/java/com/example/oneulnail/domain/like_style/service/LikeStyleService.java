@@ -1,10 +1,10 @@
-package com.example.oneulnail.like_style.service;
+package com.example.oneulnail.domain.like_style.service;
 
-import com.example.oneulnail.like_style.dto.request.LikeStyleRegisterReqDto;
-import com.example.oneulnail.like_style.dto.response.LikeStyleRegisterResDto;
-import com.example.oneulnail.like_style.entity.LikeStyle;
-import com.example.oneulnail.like_style.mapper.LikeStyleMapper;
-import com.example.oneulnail.like_style.repository.LikeStyleRepository;
+import com.example.oneulnail.domain.like_style.dto.request.LikeStyleRegisterReqDto;
+import com.example.oneulnail.domain.like_style.dto.response.LikeStyleRegisterResDto;
+import com.example.oneulnail.domain.like_style.entity.LikeStyle;
+import com.example.oneulnail.domain.like_style.repository.LikeStyleRepository;
+import com.example.oneulnail.domain.like_style.mapper.LikeStyleMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,4 @@ public class LikeStyleService {
         LikeStyle registerdLikeStyle = likeStyleRepository.save(likeStyle);
         return likeStyleMapper.likeStyleRegisterEntityToDto(registerdLikeStyle);
     }
-
-
-
 }

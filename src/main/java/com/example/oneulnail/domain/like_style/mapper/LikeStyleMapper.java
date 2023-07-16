@@ -1,7 +1,7 @@
-package com.example.oneulnail.like_style.mapper;
+package com.example.oneulnail.domain.like_style.mapper;
 
-import com.example.oneulnail.like_style.dto.response.LikeStyleRegisterResDto;
-import com.example.oneulnail.like_style.entity.LikeStyle;
+import com.example.oneulnail.domain.like_style.dto.response.LikeStyleRegisterResDto;
+import com.example.oneulnail.domain.like_style.entity.LikeStyle;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,5 +11,4 @@ public class LikeStyleMapper {
                 .msg("성공")
                 .build();
     }
-
 }
