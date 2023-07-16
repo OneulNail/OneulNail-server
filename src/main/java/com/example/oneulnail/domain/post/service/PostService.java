@@ -1,12 +1,14 @@
 package com.example.oneulnail.domain.post.service;
 
 import com.example.oneulnail.domain.post.dto.request.PostRegisterReqDto;
+import com.example.oneulnail.domain.post.dto.response.PostFindOneResDto;
 import com.example.oneulnail.domain.post.dto.response.PostRegisterResDto;
 import com.example.oneulnail.domain.post.entity.Post;
 import com.example.oneulnail.domain.post.mapper.PostMapper;
 import com.example.oneulnail.domain.post.repository.PostRepository;
 import com.example.oneulnail.domain.shop.entity.Shop;
 import com.example.oneulnail.domain.shop.service.ShopService;
+import com.example.oneulnail.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,16 @@ public class PostService {
 
     private PostRegisterResDto saveAndReturnResponse(Post post) {
         Post registeredPost = postRepository.save(post);
-        return postMapper.PostRegisterEntityToDto(registeredPost);
+        return postMapper.postRegisterEntityToDto(registeredPost);
+    }
+
+    public Post findById(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException("Post Not Found"));
+    }
+
+    public PostFindOneResDto findDtoById(Long postId) {
+        Post foundPost = findById(postId);
+        return postMapper.postFindOneEntityToDto(foundPost);
     }
 }
