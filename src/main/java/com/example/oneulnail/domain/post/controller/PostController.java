@@ -48,4 +48,15 @@ public class PostController {
         Slice<PostInfoResDto> posts = postService.findAllByShopId(shopId, pageable);
         return BaseResponse.onSuccess(posts);
     }
+
+    @GetMapping("/category/{category}")
+    public BaseResponse<Slice<PostInfoResDto>> findAllByCategory(
+            @PathVariable String category,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+            ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Slice<PostInfoResDto> posts = postService.findAllByCategory(category, pageable);
+        return BaseResponse.onSuccess(posts);
+    }
 }
