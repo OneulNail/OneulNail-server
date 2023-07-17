@@ -1,7 +1,6 @@
 package com.example.oneulnail.domain.post.mapper;
 
-import com.example.oneulnail.domain.post.dto.response.PostFindOneResDto;
-import com.example.oneulnail.domain.post.dto.response.PostListResDto;
+import com.example.oneulnail.domain.post.dto.response.PostInfoResDto;
 import com.example.oneulnail.domain.post.dto.response.PostRegisterResDto;
 import com.example.oneulnail.domain.post.entity.Post;
 import org.springframework.stereotype.Component;
@@ -14,20 +13,8 @@ public class PostMapper {
                 .build();
     }
 
-    public PostFindOneResDto postFindOneEntityToDto(Post post) {
-        return PostFindOneResDto.builder()
-                .shopId(post.getShop().getId())
-                .postId(post.getId())
-                .name(post.getName())
-                .likeCount(post.getLikeCount())
-                .imgUrl(post.getImgUrl())
-                .price(post.getPrice())
-                .content(post.getContent())
-                .build();
-    }
-
-    public PostListResDto postListEntityToDto(Post post) {
-        return PostListResDto.builder()
+    public PostInfoResDto postEntityToPostInfo(Post post) {
+        return PostInfoResDto.builder()
                 .shopId(post.getShop().getId())
                 .postId(post.getId())
                 .name(post.getName())
