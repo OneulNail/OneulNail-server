@@ -3,11 +3,15 @@ package com.example.oneulnail.domain.likePost.service;
 import com.example.oneulnail.domain.likePost.dto.request.LikePostRegisterReqDto;
 import com.example.oneulnail.domain.likePost.entity.LikePost;
 import com.example.oneulnail.domain.likePost.repository.LikePostRepository;
+import com.example.oneulnail.domain.post.dto.response.PostInfoResDto;
 import com.example.oneulnail.domain.post.entity.Post;
+import com.example.oneulnail.domain.post.mapper.PostMapper;
 import com.example.oneulnail.domain.post.service.PostService;
 import com.example.oneulnail.domain.user.entity.User;
 import com.example.oneulnail.global.config.security.oauth2.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 public class LikePostService {
 
     private final LikePostRepository likePostRepository;
+    private final PostMapper postMapper;
     private final PostService postService;
     private final AuthService authService;
 
@@ -26,6 +31,13 @@ public class LikePostService {
         Post foundPost = findPostAndAddLikeCount(registerReqDto);
 
         saveNewLikePost(foundPost, foundUser);
+    }
+
+    public Slice<PostInfoResDto> findPostsByUserId(HttpServletRequest request, Pageable pageable) {
+        String userEmail = extractUserEmailFromRequest(request);
+        User foundUser = findUserByEmail(userEmail);
+        Slice<Post> posts = likePostRepository.findPostsByUserIdSlice(foundUser.getId(), pageable);
+        return posts.map(post -> postMapper.postEntityToPostInfo(post));
     }
 
     private String extractUserEmailFromRequest(HttpServletRequest request) {
