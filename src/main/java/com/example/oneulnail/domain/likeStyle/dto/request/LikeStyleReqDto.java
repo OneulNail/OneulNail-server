@@ -1,10 +1,10 @@
-package com.example.oneulnail.domain.like_style.dto.response;
+package com.example.oneulnail.domain.likeStyle.dto.request;
 
 import lombok.*;
 
 @Getter
 @Builder
-public class LikeStyleResDto {
+public class LikeStyleReqDto {
     private Long id;
     private String style1;
     private String style2;

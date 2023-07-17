@@ -49,4 +49,8 @@ public class Post extends BaseEntity {
         this.category = category;
         this.shop = shop;
     }
+
+    public void addLikeCount() {
+        this.likeCount = likeCount + 1;
+    }
 }

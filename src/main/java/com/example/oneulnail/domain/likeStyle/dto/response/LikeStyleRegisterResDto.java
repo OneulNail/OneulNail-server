@@ -1,4 +1,4 @@
-package com.example.oneulnail.domain.like_style.dto.response;
+package com.example.oneulnail.domain.likeStyle.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;

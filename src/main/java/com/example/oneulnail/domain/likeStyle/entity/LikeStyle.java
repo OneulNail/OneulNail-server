@@ -1,4 +1,4 @@
-package com.example.oneulnail.domain.like_style.entity;
+package com.example.oneulnail.domain.likeStyle.entity;
 
 import com.example.oneulnail.domain.user.entity.User;
 import com.example.oneulnail.global.entity.BaseEntity;

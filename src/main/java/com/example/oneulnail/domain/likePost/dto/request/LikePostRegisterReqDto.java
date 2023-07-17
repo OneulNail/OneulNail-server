@@ -1,2 +1,8 @@
-package com.example.oneulnail.domain.likePost.dto.request;public class LikePostRegisterReqDto {
+package com.example.oneulnail.domain.likePost.dto.request;
+
+import lombok.Getter;
+
+@Getter
+public class LikePostRegisterReqDto {
+    private Long postId;
 }
