@@ -1,6 +1,5 @@
 package com.example.oneulnail.global.config.security.oauth2.service;
 
-import com.example.oneulnail.global.config.security.jwt.service.JwtService;
 import com.example.oneulnail.global.config.security.oauth2.dto.OAuth2SignUpReqDto;
 import com.example.oneulnail.global.config.security.oauth2.dto.OAuth2SignUpResDto;
 import com.example.oneulnail.global.config.security.oauth2.mapper.OAuth2SignUpMapper;
@@ -15,19 +14,22 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public class OAuth2SignUpService {
 
-    private final JwtService jwtService;
+    private final AuthService authService;
     private final UserRepository userRepository;
     private final OAuth2SignUpMapper mapper;
 
     public OAuth2SignUpResDto signUp(HttpServletRequest request, OAuth2SignUpReqDto oAuth2SignUpReqDto) {
-        String accessToken = jwtService.extractAccessToken(request).orElseThrow();
-        String email = jwtService.extractEmail(accessToken).orElseThrow();
+        String email = authService.extractEmailFromJwt(request);
+        User foundUser = authService.findUserByEmail(email);
 
-        User foundUser = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
-        foundUser.oAuth2SignUp(oAuth2SignUpReqDto.getPhoneNum(), oAuth2SignUpReqDto.getName());
+        updateUserWithOAuth2SignUpInfo(foundUser, oAuth2SignUpReqDto);
         User savedUser = userRepository.save(foundUser);
 
         return mapper.entityToDto(savedUser);
     }
+
+    private void updateUserWithOAuth2SignUpInfo(User user, OAuth2SignUpReqDto oAuth2SignUpReqDto) {
+        user.oAuth2SignUp(oAuth2SignUpReqDto.getPhoneNum(), oAuth2SignUpReqDto.getName());
+    }
 }
+

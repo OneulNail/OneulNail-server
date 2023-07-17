@@ -1,9 +1,9 @@
-package com.example.oneulnail.domain.like_style.controller;
+package com.example.oneulnail.domain.likeStyle.controller;
 
-import com.example.oneulnail.domain.like_style.dto.response.LikeStyleRegisterResDto;
+import com.example.oneulnail.domain.likeStyle.dto.response.LikeStyleRegisterResDto;
 import com.example.oneulnail.global.entity.BaseResponse;
-import com.example.oneulnail.domain.like_style.dto.request.LikeStyleRegisterReqDto;
-import com.example.oneulnail.domain.like_style.service.LikeStyleService;
+import com.example.oneulnail.domain.likeStyle.dto.request.LikeStyleRegisterReqDto;
+import com.example.oneulnail.domain.likeStyle.service.LikeStyleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
