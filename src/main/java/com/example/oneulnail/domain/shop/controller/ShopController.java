@@ -36,8 +36,8 @@ public class ShopController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Slice<ShopListResDto> shopFindAllResDto = shopService.findAll(pageable);
-        return BaseResponse.onSuccess(shopFindAllResDto);
+        Slice<ShopListResDto> shops = shopService.findAll(pageable);
+        return BaseResponse.onSuccess(shops);
     }
 
 }
