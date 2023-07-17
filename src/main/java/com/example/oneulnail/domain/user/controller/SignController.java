@@ -6,6 +6,7 @@ import com.example.oneulnail.domain.user.dto.response.SignInResDto;
 import com.example.oneulnail.domain.user.dto.response.SignMessageResDto;
 import com.example.oneulnail.domain.user.dto.response.SignUpResDto;
 import com.example.oneulnail.global.config.security.JwtTokenProvider;
+import com.example.oneulnail.global.config.security.oauth2.entity.Role;
 import com.example.oneulnail.global.entity.BaseResponse;
 import com.example.oneulnail.global.exception.BadRequestException;
 import com.example.oneulnail.global.exception.BaseException;
@@ -67,10 +68,8 @@ public class SignController {
 
         if(signUpReqDto.getPhone_num()==null) throw new BadRequestException(USERS_EMPTY_USER_PHONE_NUMBER);
         if(signUpReqDto.getPassword()==null)throw new BadRequestException(USERS_EMPTY_USER_PASSWORD);
-        if(signUpReqDto.getName()==null) throw new BadRequestException("이름 미입력");
-        if(signUpReqDto.getRole()==null)throw new BadRequestException("역할 미입력");
-
-        SignUpResDto signUpResDto = signService.signUp(signUpReqDto);
+        if(signUpReqDto.getName()==null) throw new BadRequestException(POST_USERS_EMPTY_NAME);
+          SignUpResDto signUpResDto = signService.signUp(signUpReqDto);
 
         LOGGER.info("회원가입을 완료. 전화번호 : {}", signUpReqDto.getPhone_num());
         return BaseResponse.onSuccess(signUpResDto);
