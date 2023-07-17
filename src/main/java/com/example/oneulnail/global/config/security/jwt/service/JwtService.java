@@ -53,6 +53,8 @@ public class JwtService {
     public String createAccessToken(String email) {
         Date now = new Date();
         return Jwts.builder()
+                .setIssuer("issuer") // 발급자 설정
+                .setAudience("audience") // 수신자 설정
                 .setSubject(ACCESS_TOKEN_SUBJECT) // 토큰의 주제를 설정합니다.
                 .setExpiration(new Date(now.getTime() + accessTokenExpirationPeriod)) // 토큰의 만료 시간을 설정합니다.
                 .claim(EMAIL_CLAIM, email) // 클레임을 추가합니다. 여기서는 이메일을 추가하였습니다.
@@ -67,6 +69,8 @@ public class JwtService {
     public String createRefreshToken() {
         Date now = new Date();
         return Jwts.builder()
+                .setIssuer("issuer") // 발급자 설정
+                .setAudience("audience") // 수신자 설정
                 .setSubject(REFRESH_TOKEN_SUBJECT) // 토큰의 주제를 설정합니다.
                 .setExpiration(new Date(now.getTime() + refreshTokenExpirationPeriod)) // 토큰의 만료 시간을 설정합니다.
                 .signWith(SignatureAlgorithm.HS512, secretKey) // 토큰을 서명합니다. 사용할 알고리즘과 서명에 사용할 키를 설정합니다.
@@ -126,6 +130,8 @@ public class JwtService {
     public Optional<String> extractEmail(String accessToken) {
         try {
             Claims claims = Jwts.parser()
+                    .requireIssuer("issuer") // 발급자 확인
+                    .requireAudience("audience") // 수신자 확인
                     .setSigningKey(secretKey) // 토큰을 검증할 때 사용할 서명 키를 설정합니다.
                     .parseClaimsJws(accessToken) // 토큰을 파싱하여 클레임을 추출합니다.
                     .getBody(); // 추출한 클레임을 반환합니다.
