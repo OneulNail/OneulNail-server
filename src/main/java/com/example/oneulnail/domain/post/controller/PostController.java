@@ -1,8 +1,7 @@
 package com.example.oneulnail.domain.post.controller;
 
 import com.example.oneulnail.domain.post.dto.request.PostRegisterReqDto;
-import com.example.oneulnail.domain.post.dto.response.PostFindOneResDto;
-import com.example.oneulnail.domain.post.dto.response.PostListResDto;
+import com.example.oneulnail.domain.post.dto.response.PostInfoResDto;
 import com.example.oneulnail.domain.post.dto.response.PostRegisterResDto;
 import com.example.oneulnail.domain.post.service.PostService;
 import com.example.oneulnail.global.entity.BaseResponse;
@@ -26,17 +25,27 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public BaseResponse<PostFindOneResDto> findByPostId(@PathVariable Long postId) {
-        PostFindOneResDto postFindOneResDto = postService.findDtoById(postId);
+    public BaseResponse<PostInfoResDto> findByPostId(@PathVariable Long postId) {
+        PostInfoResDto postFindOneResDto = postService.findDtoById(postId);
         return BaseResponse.onSuccess(postFindOneResDto);
     }
 
     @GetMapping
-    public BaseResponse<Slice<PostListResDto>> findAll(
+    public BaseResponse<Slice<PostInfoResDto>> findAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Slice<PostListResDto> posts = postService.findAll(pageable);
+        Slice<PostInfoResDto> posts = postService.findAll(pageable);
+        return BaseResponse.onSuccess(posts);
+    }
+
+    @GetMapping("/shop/{shopId}")
+    public BaseResponse<Slice<PostInfoResDto>> findAllByShopId(
+            @PathVariable Long shopId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Slice<PostInfoResDto> posts = postService.findAllByShopId(shopId, pageable);
         return BaseResponse.onSuccess(posts);
     }
 }

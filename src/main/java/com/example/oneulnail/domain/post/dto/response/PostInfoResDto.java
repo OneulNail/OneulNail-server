@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class PostFindOneResDto {
+public class PostInfoResDto {
     private Long shopId;
     private Long postId;
     private String name;
