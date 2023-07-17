@@ -12,5 +12,6 @@ public class PostInfoResDto {
     private int likeCount;
     private String imgUrl;
     private int price;
+    private String category;
     private String content;
 }
