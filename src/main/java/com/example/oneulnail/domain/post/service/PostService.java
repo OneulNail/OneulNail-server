@@ -2,14 +2,18 @@ package com.example.oneulnail.domain.post.service;
 
 import com.example.oneulnail.domain.post.dto.request.PostRegisterReqDto;
 import com.example.oneulnail.domain.post.dto.response.PostFindOneResDto;
+import com.example.oneulnail.domain.post.dto.response.PostListResDto;
 import com.example.oneulnail.domain.post.dto.response.PostRegisterResDto;
 import com.example.oneulnail.domain.post.entity.Post;
 import com.example.oneulnail.domain.post.mapper.PostMapper;
 import com.example.oneulnail.domain.post.repository.PostRepository;
+import com.example.oneulnail.domain.shop.dto.response.ShopListResDto;
 import com.example.oneulnail.domain.shop.entity.Shop;
 import com.example.oneulnail.domain.shop.service.ShopService;
 import com.example.oneulnail.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -52,5 +56,10 @@ public class PostService {
     public PostFindOneResDto findDtoById(Long postId) {
         Post foundPost = findById(postId);
         return postMapper.postFindOneEntityToDto(foundPost);
+    }
+
+    public Slice<PostListResDto> findAll(Pageable pageable) {
+        Slice<Post> posts = postRepository.findAllSlice(pageable);
+        return posts.map(post -> postMapper.postListEntityToDto(post));
     }
 }
