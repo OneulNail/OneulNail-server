@@ -21,6 +21,7 @@ public class PostMapper {
                 .likeCount(post.getLikeCount())
                 .imgUrl(post.getImgUrl())
                 .price(post.getPrice())
+                .category(post.getCategory())
                 .content(post.getContent())
                 .build();
     }

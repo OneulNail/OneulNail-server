@@ -65,4 +65,9 @@ public class PostService {
         Slice<Post> posts = postRepository.findAllByShopIdSlice(shopId, pageable);
         return posts.map(post -> postMapper.postEntityToPostInfo(post));
     }
+
+    public Slice<PostInfoResDto> findAllByCategory(String category, Pageable pageable) {
+        Slice<Post> posts = postRepository.findAllByCategorySlice(category, pageable);
+        return posts.map(post -> postMapper.postEntityToPostInfo(post));
+    }
 }
