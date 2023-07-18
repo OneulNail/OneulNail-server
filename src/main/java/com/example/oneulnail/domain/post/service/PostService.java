@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class PostService {
     private final ShopService shopService;
     private final PostMapper postMapper;
 
+    @Transactional
     public PostRegisterResDto register(PostRegisterReqDto postRegisterReqDto) {
         Shop foundShop = shopService.findById(postRegisterReqDto.getShopId());
         Post newPost = buildPost(postRegisterReqDto, foundShop);
@@ -46,26 +48,31 @@ public class PostService {
         return postMapper.postRegisterEntityToDto(registeredPost);
     }
 
+    @Transactional(readOnly = true)
     public Post findById(Long postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException("Post Not Found"));
     }
 
+    @Transactional(readOnly = true)
     public PostInfoResDto findDtoById(Long postId) {
         Post foundPost = findById(postId);
         return postMapper.postEntityToPostInfo(foundPost);
     }
 
+    @Transactional(readOnly = true)
     public Slice<PostInfoResDto> findAll(Pageable pageable) {
         Slice<Post> posts = postRepository.findAllSlice(pageable);
         return posts.map(post -> postMapper.postEntityToPostInfo(post));
     }
 
+    @Transactional(readOnly = true)
     public Slice<PostInfoResDto> findAllByShopId(Long shopId, Pageable pageable) {
         Slice<Post> posts = postRepository.findAllByShopIdSlice(shopId, pageable);
         return posts.map(post -> postMapper.postEntityToPostInfo(post));
     }
 
+    @Transactional(readOnly = true)
     public Slice<PostInfoResDto> findAllByCategory(String category, Pageable pageable) {
         Slice<Post> posts = postRepository.findAllByCategorySlice(category, pageable);
         return posts.map(post -> postMapper.postEntityToPostInfo(post));

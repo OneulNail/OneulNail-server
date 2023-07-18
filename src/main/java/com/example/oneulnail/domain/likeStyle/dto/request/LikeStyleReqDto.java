@@ -3,7 +3,7 @@ package com.example.oneulnail.domain.likeStyle.dto.request;
 import lombok.*;
 
 @Getter
-@Builder
+@NoArgsConstructor
 public class LikeStyleReqDto {
     private Long id;
     private String style1;

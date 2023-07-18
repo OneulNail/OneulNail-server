@@ -5,6 +5,7 @@ import com.example.oneulnail.domain.user.repository.UserRepository;
 import com.example.oneulnail.global.config.security.jwt.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,6 +21,7 @@ public class AuthService {
         return jwtService.extractEmail(accessToken).orElseThrow();
     }
 
+    @Transactional(readOnly = true)
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found with email: " + email));

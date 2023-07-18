@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,6 +26,7 @@ public class LikePostService {
     private final PostService postService;
     private final AuthService authService;
 
+    @Transactional
     public void register(HttpServletRequest request, LikePostRegisterReqDto registerReqDto) {
         String userEmail = extractUserEmailFromRequest(request);
         User foundUser = findUserByEmail(userEmail);
@@ -33,6 +35,7 @@ public class LikePostService {
         saveNewLikePost(foundPost, foundUser);
     }
 
+    @Transactional(readOnly = true)
     public Slice<PostInfoResDto> findPostsByUserId(HttpServletRequest request, Pageable pageable) {
         String userEmail = extractUserEmailFromRequest(request);
         User foundUser = findUserByEmail(userEmail);

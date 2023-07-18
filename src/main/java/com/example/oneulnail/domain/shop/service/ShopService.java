@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class ShopService {
     private final ShopRepository shopRepository;
     private final ShopMapper shopMapper;
 
+    @Transactional
     public ShopRegisterResDto register(ShopRegisterReqDto requestDto) {
         Shop newShop = buildShop(requestDto);
         return saveAndReturnResponse(newShop);
@@ -43,16 +45,19 @@ public class ShopService {
         return shopMapper.ShopRegisterEntityToDto(registeredShop);
     }
 
+    @Transactional(readOnly = true)
     public Shop findById(Long shopId) {
         return shopRepository.findById(shopId)
                 .orElseThrow(() -> new NotFoundException("Shop not found"));
     }
 
+    @Transactional(readOnly = true)
     public ShopFindOneResDto findDtoById(Long shopId) {
         Shop foundShop = findById(shopId);
         return shopMapper.shopFindOneEntityToDto(foundShop);
     }
 
+    @Transactional(readOnly = true)
     public Slice<ShopListResDto> findAll(Pageable pageable) {
         Slice<Shop> shops = shopRepository.findAllSlice(pageable);
         return shops.map(shop -> shopMapper.entityToShopListResDto(shop));
