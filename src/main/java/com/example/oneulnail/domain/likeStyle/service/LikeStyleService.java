@@ -7,6 +7,7 @@ import com.example.oneulnail.domain.likeStyle.repository.LikeStyleRepository;
 import com.example.oneulnail.domain.likeStyle.mapper.LikeStyleMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -14,6 +15,7 @@ public class LikeStyleService {
     private final LikeStyleRepository likeStyleRepository;
     private final LikeStyleMapper likeStyleMapper;
 
+    @Transactional
     public LikeStyleRegisterResDto register(LikeStyleRegisterReqDto requestDto){
         LikeStyle newLikeStyle = buildLikeStyle(requestDto);
         return saveAndReturnResponse(newLikeStyle);

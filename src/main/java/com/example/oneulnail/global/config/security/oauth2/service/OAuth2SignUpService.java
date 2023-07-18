@@ -7,6 +7,7 @@ import com.example.oneulnail.domain.user.entity.User;
 import com.example.oneulnail.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,6 +19,7 @@ public class OAuth2SignUpService {
     private final UserRepository userRepository;
     private final OAuth2SignUpMapper mapper;
 
+    @Transactional
     public OAuth2SignUpResDto signUp(HttpServletRequest request, OAuth2SignUpReqDto oAuth2SignUpReqDto) {
         String email = authService.extractEmailFromJwt(request);
         User foundUser = authService.findUserByEmail(email);

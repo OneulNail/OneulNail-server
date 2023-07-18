@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,12 +22,14 @@ public class ReservationService {
     private final ShopService shopService;
     private final ReservationMapper reservationMapper;
 
-    public ReservationRegisterResDto reservate(ReservationRegisterReqDto reservationRegisterReqDto) {
+    @Transactional
+    public ReservationRegisterResDto register(ReservationRegisterReqDto reservationRegisterReqDto) {
         Shop foundShop = shopService.findById(reservationRegisterReqDto.getShopId());
         Reservation newReservation = buildReservation(reservationRegisterReqDto,foundShop);
         return saveReservation(newReservation,foundShop);
     }
 
+    @Transactional(readOnly = true)
     public Slice<ReservationInfoResDto> findReservationsByShopId(Long shopId, Pageable pageable) {
         Slice<Reservation> reservations = reservationRepository.findReservationsByShopIdSlice(shopId,pageable);
         return reservations.map(reservation -> reservationMapper.reservationEntityToReservationInfo(reservation));

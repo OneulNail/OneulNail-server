@@ -21,7 +21,7 @@ public class ReservationController {
 
     @PostMapping
     public BaseResponse<ReservationRegisterResDto> register(@RequestBody ReservationRegisterReqDto reservationRegisterReqDto) {
-        ReservationRegisterResDto registerResDto = reservationService.reservate(reservationRegisterReqDto);
+        ReservationRegisterResDto registerResDto = reservationService.register(reservationRegisterReqDto);
         return BaseResponse.onSuccess(registerResDto);
     }
 
