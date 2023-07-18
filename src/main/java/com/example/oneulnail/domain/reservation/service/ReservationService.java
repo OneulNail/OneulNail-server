@@ -31,12 +31,7 @@ public class ReservationService {
 
     @Transactional(readOnly = true)
     public Slice<ReservationInfoResDto> findReservationsByShopId(Long shopId, Pageable pageable) {
-        Slice<Reservation> reservations = reservationRepository.findReservationsByShopIdSlice(shopId, pageable);
-        return reservations.map(reservation -> reservationMapper.reservationEntityToReservationInfo(reservation));
-    }
-
-    public Slice<ReservationInfoResDto> findAll(Pageable pageable) {
-        Slice<Reservation> reservations = reservationRepository.findAll(pageable);
+        Slice<Reservation> reservations = reservationRepository.findReservationsByShopIdSlice(shopId,pageable);
         return reservations.map(reservation -> reservationMapper.reservationEntityToReservationInfo(reservation));
     }
 
