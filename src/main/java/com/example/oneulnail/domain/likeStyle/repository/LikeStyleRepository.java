@@ -1,6 +1,6 @@
-package com.example.oneulnail.domain.like_style.repository;
+package com.example.oneulnail.domain.likeStyle.repository;
 
-import com.example.oneulnail.domain.like_style.entity.LikeStyle;
+import com.example.oneulnail.domain.likeStyle.entity.LikeStyle;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LikeStyleRepository extends JpaRepository<LikeStyle, Long>{

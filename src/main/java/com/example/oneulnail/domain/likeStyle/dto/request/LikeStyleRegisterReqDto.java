@@ -1,4 +1,4 @@
-package com.example.oneulnail.domain.like_style.dto.request;
+package com.example.oneulnail.domain.likeStyle.dto.request;
 
 import lombok.Getter;
 

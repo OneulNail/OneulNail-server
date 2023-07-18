@@ -1,10 +1,10 @@
-package com.example.oneulnail.domain.like_style.service;
+package com.example.oneulnail.domain.likeStyle.service;
 
-import com.example.oneulnail.domain.like_style.dto.request.LikeStyleRegisterReqDto;
-import com.example.oneulnail.domain.like_style.dto.response.LikeStyleRegisterResDto;
-import com.example.oneulnail.domain.like_style.entity.LikeStyle;
-import com.example.oneulnail.domain.like_style.repository.LikeStyleRepository;
-import com.example.oneulnail.domain.like_style.mapper.LikeStyleMapper;
+import com.example.oneulnail.domain.likeStyle.dto.request.LikeStyleRegisterReqDto;
+import com.example.oneulnail.domain.likeStyle.dto.response.LikeStyleRegisterResDto;
+import com.example.oneulnail.domain.likeStyle.entity.LikeStyle;
+import com.example.oneulnail.domain.likeStyle.repository.LikeStyleRepository;
+import com.example.oneulnail.domain.likeStyle.mapper.LikeStyleMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

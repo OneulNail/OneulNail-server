@@ -1,6 +1,7 @@
 package com.example.oneulnail.domain.post.entity;
 
 import com.example.oneulnail.domain.shop.entity.Shop;
+import com.example.oneulnail.global.entity.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "post")
-public class Post {
+public class Post extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -47,5 +48,9 @@ public class Post {
         this.content = content;
         this.category = category;
         this.shop = shop;
+    }
+
+    public void addLikeCount() {
+        this.likeCount = likeCount + 1;
     }
 }
