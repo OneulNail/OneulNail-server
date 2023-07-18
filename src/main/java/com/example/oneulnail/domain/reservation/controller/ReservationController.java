@@ -31,7 +31,16 @@ public class ReservationController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Slice<ReservationInfoResDto> reservationInfoResDtos = reservationService.findReservationsByShopId(shopId, pageable);
-        return BaseResponse.onSuccess(reservationInfoResDtos);
+        Slice<ReservationInfoResDto> reservationInfoResDtoList = reservationService.findReservationsByShopId(shopId, pageable);
+        return BaseResponse.onSuccess(reservationInfoResDtoList);
+    }
+
+    @GetMapping
+    public BaseResponse<Slice<ReservationInfoResDto>> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Slice<ReservationInfoResDto> reservationInfoResDtoList = reservationService.findAll(pageable);
+        return BaseResponse.onSuccess(reservationInfoResDtoList);
     }
 }

@@ -12,4 +12,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     @Query("SELECT r from Reservation r WHERE r.shop.id = :shopId")
     Slice<Reservation> findReservationsByShopIdSlice(@Param("shopId") Long shopId, Pageable pageable);
+
+    @Query("SELECT r from Reservation r")
+    Slice<Reservation> findAllSlice(Pageable pageable);
 }
