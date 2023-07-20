@@ -67,6 +67,7 @@ public class User extends BaseEntity implements UserDetails{
     public void oAuth2SignUp(String phoneNum, String name) {
         this.phoneNum = phoneNum;
         this.name = name;
+        this.role = Role.USER;
     }
 
     public void updateRefreshToken(String updateRefreshToken) {

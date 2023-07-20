@@ -147,14 +147,14 @@ public class JwtService {
      * AccessToken 헤더 설정
      */
     public void setAccessTokenHeader(HttpServletResponse response, String accessToken) {
-        response.setHeader(accessHeader, accessToken);
+        response.setHeader(accessHeader, "Bearer " + accessToken);
     }
 
     /**
      * RefreshToken 헤더 설정
      */
     public void setRefreshTokenHeader(HttpServletResponse response, String refreshToken) {
-        response.setHeader(refreshHeader, refreshToken);
+        response.setHeader(refreshHeader, "Bearer " + refreshToken);
     }
 
     /**
