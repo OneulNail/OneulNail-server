@@ -32,9 +32,10 @@ public class LikeStyle extends BaseEntity {
     private User user;
 
     @Builder
-    public LikeStyle(String style1, String style2, String style3){
+    public LikeStyle(String style1, String style2, String style3, User user){
         this.style1 = style1;
         this.style2 = style2;
         this.style3 = style3;
+        this.user = user;
     }
 }
