@@ -1,13 +1,13 @@
 package com.example.oneulnail.domain.reservation.dto.request;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
-@Builder
+@NoArgsConstructor
 public class ReservationRegisterReqDto {
     private Long shopId;
-    private Date date;
+    private LocalDateTime date;
 }

@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -26,6 +27,7 @@ public class SignService {
     private final PasswordEncoder passwordEncoder;
     private final SignMapper signMapper;
 
+    @Transactional
     public SignUpResDto signUp(SignUpReqDto signUpReqDto) {
         User newUser = buildUser(signUpReqDto);
 
@@ -34,6 +36,7 @@ public class SignService {
         return signMapper.signUpEntityToDto();
     }
 
+    @Transactional(readOnly = true)
     public SignInResDto signIn(String phone_num, String password) throws RuntimeException {
         User user = userRepository.getByPhoneNum(phone_num);
 

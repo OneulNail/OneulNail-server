@@ -7,7 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -20,14 +21,14 @@ public class Reservation extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private Date date;
+    private LocalDateTime date;
 
     @ManyToOne
     @JoinColumn(name = "shop_id")
     private Shop shop;
 
     @Builder
-    public Reservation(Date date,Shop shop){
+    public Reservation(LocalDateTime date,Shop shop){
         this.date= date;
         this.shop=shop;
     }

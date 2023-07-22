@@ -1,8 +1,10 @@
 package com.example.oneulnail.domain.post.dto.request;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class PostRegisterReqDto {
 
     private Long shopId;
