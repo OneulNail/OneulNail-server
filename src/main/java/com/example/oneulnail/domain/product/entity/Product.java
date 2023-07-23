@@ -21,8 +21,4 @@ public class Product extends BaseEntity {
     private String imgUrl;
 
     private int price;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 }

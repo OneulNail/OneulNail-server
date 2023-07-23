@@ -1,6 +1,7 @@
 package com.example.oneulnail.domain.reservation.entity;
 
 import com.example.oneulnail.domain.shop.entity.Shop;
+import com.example.oneulnail.domain.user.entity.User;
 import com.example.oneulnail.global.entity.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,13 +25,17 @@ public class Reservation extends BaseEntity {
     private LocalDateTime date;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
     @JoinColumn(name = "shop_id")
     private Shop shop;
 
     @Builder
-    public Reservation(LocalDateTime date,Shop shop){
-        this.date= date;
-        this.shop=shop;
+    public Reservation(LocalDateTime date, User user, Shop shop){
+        this.date = date;
+        this.user = user;
+        this.shop = shop;
     }
-
 }
