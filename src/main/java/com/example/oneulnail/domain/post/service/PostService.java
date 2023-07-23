@@ -10,10 +10,13 @@ import com.example.oneulnail.domain.shop.entity.Shop;
 import com.example.oneulnail.domain.shop.service.ShopService;
 import com.example.oneulnail.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -75,6 +78,13 @@ public class PostService {
     @Transactional(readOnly = true)
     public Slice<PostInfoResDto> findAllByCategory(String category, Pageable pageable) {
         Slice<Post> posts = postRepository.findAllByCategorySlice(category, pageable);
+        return posts.map(post -> postMapper.postEntityToPostInfo(post));
+    }
+
+    @Transactional(readOnly = true)
+    public Slice<PostInfoResDto> findTopThreePostsByStyle(String style) {
+        Pageable topThree = PageRequest.of(0, 3);
+        Slice<Post> posts = postRepository.findTopThreePostsByStyle(style, topThree);
         return posts.map(post -> postMapper.postEntityToPostInfo(post));
     }
 }
