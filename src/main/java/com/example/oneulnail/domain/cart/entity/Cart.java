@@ -1,5 +1,9 @@
 package com.example.oneulnail.domain.cart.entity;
 
+import com.example.oneulnail.domain.order.entity.Order;
+import com.example.oneulnail.domain.product.entity.Product;
+import com.example.oneulnail.domain.shop.entity.Shop;
+import com.example.oneulnail.domain.user.entity.User;
 import com.example.oneulnail.global.entity.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,4 +20,20 @@ public class Cart extends BaseEntity {
     private Long id;
 
     private int quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "shop_id")
+    private Shop shop;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 }

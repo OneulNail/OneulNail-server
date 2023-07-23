@@ -1,5 +1,6 @@
 package com.example.oneulnail.domain.product.entity;
 
+import com.example.oneulnail.domain.user.entity.User;
 import com.example.oneulnail.global.entity.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,4 +21,8 @@ public class Product extends BaseEntity {
     private String imgUrl;
 
     private int price;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
