@@ -26,10 +26,6 @@ public class Cart extends BaseEntity {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "shop_id")
-    private Shop shop;
-
-    @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
 

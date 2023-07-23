@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/reservation")
 @RequiredArgsConstructor
@@ -20,8 +22,10 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @PostMapping
-    public BaseResponse<ReservationRegisterResDto> register(@RequestBody ReservationRegisterReqDto reservationRegisterReqDto) {
-        ReservationRegisterResDto registerResDto = reservationService.register(reservationRegisterReqDto);
+    public BaseResponse<ReservationRegisterResDto> register(
+            HttpServletRequest request,
+            @RequestBody ReservationRegisterReqDto reservationRegisterReqDto) {
+        ReservationRegisterResDto registerResDto = reservationService.register(request, reservationRegisterReqDto);
         return BaseResponse.onSuccess(registerResDto);
     }
 
