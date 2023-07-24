@@ -6,6 +6,9 @@ import com.example.oneulnail.domain.product.dto.response.ProductRegisterResDto;
 import com.example.oneulnail.domain.product.service.ProductService;
 import com.example.oneulnail.global.entity.BaseResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,5 +29,15 @@ public class ProductCotroller {
         ProductInfoResDto productInfoResDto = productService.findDtoById(productId);
         return BaseResponse.onSuccess(productInfoResDto);
     }
-    
+
+    @GetMapping
+    public BaseResponse<Slice<ProductInfoResDto>> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Slice<ProductInfoResDto> posts = productService.findAll(pageable);
+        return BaseResponse.onSuccess(posts);
+    }
+
+
 }

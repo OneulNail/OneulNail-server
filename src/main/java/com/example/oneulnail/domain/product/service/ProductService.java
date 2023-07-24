@@ -8,6 +8,8 @@ import com.example.oneulnail.domain.product.mapper.ProductMapper;
 import com.example.oneulnail.domain.product.repository.ProductRepository;
 import com.example.oneulnail.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,5 +43,10 @@ public class ProductService {
     @Transactional(readOnly = true)
     public Product findById(Long productId){
         return productRepository.findById(productId).orElseThrow(()->new NotFoundException("Product Not Found"));
+    }
+    @Transactional(readOnly = true)
+    public Slice<ProductInfoResDto> findAll(Pageable pageable) {
+        Slice<Product> products = productRepository.findAllSlice(pageable);
+        return products.map(product -> productMapper.productInfoEntityToDto(product));
     }
 }
