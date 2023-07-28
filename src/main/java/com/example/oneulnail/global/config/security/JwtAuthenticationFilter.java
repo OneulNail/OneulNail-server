@@ -28,10 +28,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = jwtTokenProvider.resolveToken(servletRequest);
         String requestURI = httpServletRequest.getRequestURI();
 
-        if (token != null && jwtTokenProvider.validateToken(token)) {
-            Authentication authentication = jwtTokenProvider.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            LOGGER.info("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
+        if (token != null && jwtTokenProvider.validateToken(servletRequest,token)) {
+            if(!((HttpServletRequest) servletRequest).getRequestURI().equals("/user/reissue")){
+                Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                LOGGER.info("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
+            }
         }
         else {
             LOGGER.info("유효한 JWT 토큰이 없습니다, url: {}",requestURI);

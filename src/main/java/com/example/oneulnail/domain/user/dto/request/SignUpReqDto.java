@@ -13,7 +13,7 @@ import lombok.ToString;
 @Builder
 public class SignUpReqDto {
 
-    private String phone_num;
+    private String phoneNum;
 
     private String password;
 
