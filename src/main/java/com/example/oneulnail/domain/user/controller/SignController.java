@@ -6,12 +6,9 @@ import com.example.oneulnail.domain.user.dto.response.SignInResDto;
 import com.example.oneulnail.domain.user.dto.response.SignMessageResDto;
 import com.example.oneulnail.domain.user.dto.response.SignUpResDto;
 import com.example.oneulnail.global.config.security.JwtTokenProvider;
-import com.example.oneulnail.global.config.security.oauth2.entity.Role;
 import com.example.oneulnail.global.entity.BaseResponse;
 import com.example.oneulnail.global.exception.BadRequestException;
-import com.example.oneulnail.global.exception.BaseException;
 import com.example.oneulnail.domain.user.service.SignService;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 
@@ -27,6 +24,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 import static com.example.oneulnail.global.constants.BaseResponseStatus.*;
 
@@ -66,12 +65,12 @@ public class SignController {
     public BaseResponse<SignUpResDto> signUp(
             @ApiParam(value = "User-Join", required = true) @RequestBody SignUpReqDto signUpReqDto) throws IOException{
 
-        if(signUpReqDto.getPhone_num()==null) throw new BadRequestException(USERS_EMPTY_USER_PHONE_NUMBER);
+        if(signUpReqDto.getPhoneNum()==null) throw new BadRequestException(USERS_EMPTY_USER_PHONE_NUMBER);
         if(signUpReqDto.getPassword()==null)throw new BadRequestException(USERS_EMPTY_USER_PASSWORD);
         if(signUpReqDto.getName()==null) throw new BadRequestException(POST_USERS_EMPTY_NAME);
           SignUpResDto signUpResDto = signService.signUp(signUpReqDto);
 
-        LOGGER.info("회원가입을 완료. 전화번호 : {}", signUpReqDto.getPhone_num());
+        LOGGER.info("회원가입을 완료. 전화번호 : {}", signUpReqDto.getPhoneNum());
         return BaseResponse.onSuccess(signUpResDto);
     }
 
@@ -98,6 +97,12 @@ public class SignController {
         signMessageResDto.setAuthenticationNumber(numStr);
 
         return BaseResponse.onSuccess(signMessageResDto);
+    }
+
+    @PostMapping("/reissue")
+    public BaseResponse<SignInResDto> reissue(HttpServletRequest httpServletRequest){
+        SignInResDto reissue = signService.reissue(httpServletRequest);
+        return BaseResponse.onSuccess(reissue);
     }
 
 }

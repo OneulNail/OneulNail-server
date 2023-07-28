@@ -9,5 +9,6 @@ import lombok.*;
 public class SignInResDto {
 
     private String msg;
-    private String token;
+    private String accessToken;
+    private String refreshToken;
 }
