@@ -5,6 +5,8 @@ import com.example.oneulnail.domain.reservation.dto.request.ReservationRegisterR
 import com.example.oneulnail.domain.reservation.dto.response.ReservationInfoResDto;
 import com.example.oneulnail.domain.reservation.dto.response.ReservationRegisterResDto;
 import com.example.oneulnail.domain.reservation.service.ReservationService;
+import com.example.oneulnail.domain.user.entity.User;
+import com.example.oneulnail.global.annotation.LoginUser;
 import com.example.oneulnail.global.entity.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -12,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/reservation")
@@ -23,9 +24,9 @@ public class ReservationController {
 
     @PostMapping
     public BaseResponse<ReservationRegisterResDto> register(
-            HttpServletRequest request,
+            @LoginUser User user,
             @RequestBody ReservationRegisterReqDto reservationRegisterReqDto) {
-        ReservationRegisterResDto registerResDto = reservationService.register(request, reservationRegisterReqDto);
+        ReservationRegisterResDto registerResDto = reservationService.register(user, reservationRegisterReqDto);
         return BaseResponse.onSuccess(registerResDto);
     }
 

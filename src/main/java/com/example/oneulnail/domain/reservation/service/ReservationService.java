@@ -9,14 +9,12 @@ import com.example.oneulnail.domain.reservation.repository.ReservationRepository
 import com.example.oneulnail.domain.shop.entity.Shop;
 import com.example.oneulnail.domain.shop.service.ShopService;
 import com.example.oneulnail.domain.user.entity.User;
-import com.example.oneulnail.global.config.security.oauth2.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -24,15 +22,10 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final ShopService shopService;
-    private final AuthService authService;
     private final ReservationMapper reservationMapper;
 
     @Transactional
-    public ReservationRegisterResDto register(
-            HttpServletRequest request,
-            ReservationRegisterReqDto reservationRegisterReqDto) {
-        String email = authService.extractEmailFromJwt(request);
-        User foundUser = authService.findUserByEmail(email);
+    public ReservationRegisterResDto register(User foundUser, ReservationRegisterReqDto reservationRegisterReqDto) {
         Shop foundShop = shopService.findById(reservationRegisterReqDto.getShopId());
         Reservation newReservation = buildReservation(reservationRegisterReqDto, foundUser, foundShop);
         return saveReservation(newReservation, foundUser, foundShop);
