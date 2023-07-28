@@ -9,21 +9,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 
 @Service
 @RequiredArgsConstructor
 public class OAuth2SignUpService {
 
-    private final AuthService authService;
     private final UserRepository userRepository;
     private final OAuth2SignUpMapper mapper;
 
     @Transactional
-    public OAuth2SignUpResDto signUp(HttpServletRequest request, OAuth2SignUpReqDto oAuth2SignUpReqDto) {
-        String email = authService.extractEmailFromJwt(request);
-        User foundUser = authService.findUserByEmail(email);
-
+    public OAuth2SignUpResDto signUp(User foundUser, OAuth2SignUpReqDto oAuth2SignUpReqDto) {
         updateUserWithOAuth2SignUpInfo(foundUser, oAuth2SignUpReqDto);
         User savedUser = userRepository.save(foundUser);
 
