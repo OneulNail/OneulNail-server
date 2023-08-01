@@ -58,13 +58,13 @@ public enum BaseResponseStatus {
     //
 
     USER_STATUS_UNACTIVATED(BAD_REQUEST,"U000","유저가 비활성화 상태입니다."),
-    USERS_EMPTY_USER_PHONE_NUMBER(BAD_REQUEST, "U001", "유저의 전화번호를 입력해주세요."),
+    USERS_EMPTY_USER_EMAIL(BAD_REQUEST, "U001", "유저의 이메일을 입력해주세요."),
     USERS_EMPTY_USER_PASSWORD(BAD_REQUEST, "U002", "유저 비밀번호를 입력해주세요."),
     TOO_SHORT_PASSWORD(BAD_REQUEST, "U003", "비밀번호의 길이를 8자 이상을 설정해주세요."),
 
     FAILED_TO_SIGN_UP(FORBIDDEN, "U004", "회원가입에 실패하였습니다."),
 
-    USERS_EXISTS_PHONE_NUMBER(FORBIDDEN,"U005","중복된 전화번호입니다."),
+    USERS_EXISTS_EMAIL(FORBIDDEN,"U005","중복된 이메일입니다."),
 
     USERS_EXISTS_NAME(FORBIDDEN,"U006","중복된 이름입니다."),
 
@@ -73,7 +73,8 @@ public enum BaseResponseStatus {
     FAILED_TO_LOGIN(BAD_REQUEST, "U008", "로그인에 실패하였습니다."),
     NOT_EXIST_USER(BAD_REQUEST,"U009" , "해당 유저가 존재하지 않습니다."),
     ROLE_SETTING_FAILED(BAD_REQUEST,"U010","역할 설정이 잘못되었습니다."),
-    FAILED_TO_PASSWORD(BAD_REQUEST, "U011","비밀번호가 잘못되었습니다.");
+    FAILED_TO_PASSWORD(BAD_REQUEST, "U011","비밀번호가 잘못되었습니다."),
+    USER_NOT_FOUND(BAD_REQUEST, "U012", "이메일에 해당하는 유저를 찾을 수 없습니다.");
 
 
 
