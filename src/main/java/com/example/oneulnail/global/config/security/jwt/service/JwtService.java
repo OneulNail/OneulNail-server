@@ -1,9 +1,10 @@
 package com.example.oneulnail.global.config.security.jwt.service;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.example.oneulnail.domain.user.dto.response.SignInResDto;
+import com.example.oneulnail.domain.user.mapper.SignMapper;
 import com.example.oneulnail.domain.user.repository.UserRepository;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,35 +48,30 @@ public class JwtService {
     private static final String BEARER = "Bearer ";
 
     private final UserRepository userRepository;
+    private final SignMapper signMapper;
 
-    /**
-     * AccessToken 생성 메소드
-     */
     public String createAccessToken(String email) {
         Date now = new Date();
-        return Jwts.builder()
-                .setIssuer("issuer") // 발급자 설정
-                .setAudience("audience") // 수신자 설정
-                .setSubject(ACCESS_TOKEN_SUBJECT) // 토큰의 주제를 설정합니다.
-                .setExpiration(new Date(now.getTime() + accessTokenExpirationPeriod)) // 토큰의 만료 시간을 설정합니다.
-                .claim(EMAIL_CLAIM, email) // 클레임을 추가합니다. 여기서는 이메일을 추가하였습니다.
-                .signWith(SignatureAlgorithm.HS512, secretKey) // 토큰을 서명합니다. 사용할 알고리즘과 서명에 사용할 키를 설정합니다.
-                .compact(); // 최종적으로 토큰을 생성하고 반환합니다.
+        return JWT.create()
+                .withSubject(ACCESS_TOKEN_SUBJECT) // 토큰 제목(등록된 claim)
+                .withExpiresAt(new Date(now.getTime() + accessTokenExpirationPeriod)) // 토큰 만료시간(등록된 claim)
+                .withClaim(EMAIL_CLAIM, email)
+                .sign(Algorithm.HMAC512(secretKey));
     }
 
-    /**
-     * RefreshToken 생성
-     * RefreshToken은 Claim에 email도 넣지 않으므로 withClaim() X
-     */
-    public String createRefreshToken() {
+    public String createRefreshToken(String email) {
         Date now = new Date();
-        return Jwts.builder()
-                .setIssuer("issuer") // 발급자 설정
-                .setAudience("audience") // 수신자 설정
-                .setSubject(REFRESH_TOKEN_SUBJECT) // 토큰의 주제를 설정합니다.
-                .setExpiration(new Date(now.getTime() + refreshTokenExpirationPeriod)) // 토큰의 만료 시간을 설정합니다.
-                .signWith(SignatureAlgorithm.HS512, secretKey) // 토큰을 서명합니다. 사용할 알고리즘과 서명에 사용할 키를 설정합니다.
-                .compact(); // 최종적으로 토큰을 생성하고 반환합니다.
+        return JWT.create()
+                .withSubject(REFRESH_TOKEN_SUBJECT)
+                .withExpiresAt(new Date(now.getTime() + refreshTokenExpirationPeriod))
+                .withClaim(EMAIL_CLAIM, email)
+                .sign(Algorithm.HMAC512(secretKey));
+    }
+
+    public SignInResDto createToken(String email) {
+        String accessToken = createAccessToken(email);
+        String refreshToken = createRefreshToken(email);
+        return signMapper.signInEntityToDto(accessToken,refreshToken);
     }
 
     /**
@@ -88,14 +84,12 @@ public class JwtService {
         log.info("재발급된 Access Token : {}", accessToken);
     }
 
-    /**
-     * AccessToken + RefreshToken 헤더에 실어서 보내기
-     */
+    //AccessToken + RefreshToken 헤더에 실어서 보내기
     public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
         response.setStatus(HttpServletResponse.SC_OK);
 
-        setAccessTokenHeader(response, accessToken);
-        setRefreshTokenHeader(response, refreshToken);
+        response.setHeader(accessHeader, "Bearer " + accessToken);
+        response.setHeader(refreshHeader, "Bearer " + refreshToken);
         log.info("Access Token, Refresh Token 헤더 설정 완료");
     }
 
@@ -117,49 +111,35 @@ public class JwtService {
      */
     public Optional<String> extractAccessToken(HttpServletRequest request) {
         return Optional.ofNullable(request.getHeader(accessHeader))
-                .filter(refreshToken -> refreshToken.startsWith(BEARER))
-                .map(refreshToken -> refreshToken.replace(BEARER, ""));
+                .filter(accessToken -> accessToken.startsWith(BEARER))
+                .map(accessToken -> accessToken.replace(BEARER, ""));
     }
 
-    /**
-     * AccessToken에서 Email 추출
-     * 추출 전에 JWT.require()로 검증기 생성
-     * verify로 AceessToken 검증 후
-     * 유효하다면 getClaim()으로 이메일 추출
-     * 유효하지 않다면 빈 Optional 객체 반환
-     */
     public Optional<String> extractEmail(String accessToken) {
         try {
-            Claims claims = Jwts.parser()
-                    .requireIssuer("issuer") // 발급자 확인
-                    .requireAudience("audience") // 수신자 확인
-                    .setSigningKey(secretKey) // 토큰을 검증할 때 사용할 서명 키를 설정합니다.
-                    .parseClaimsJws(accessToken) // 토큰을 파싱하여 클레임을 추출합니다.
-                    .getBody(); // 추출한 클레임을 반환합니다.
-            return Optional.ofNullable(claims.get(EMAIL_CLAIM, String.class)); // 추출한 클레임 중에서 이메일 값을 가져옵니다.
+            // 토큰 유효성 검사하는데에 사용할 알고리즘이 있는 JWT verifier builder 변환
+            return Optional.ofNullable(JWT.require(Algorithm.HMAC512(secretKey))
+                    .build() // 변환된 빌더로 JWT verifier 생성
+                    .verify(accessToken) // accessToken을 검증하고 유효하지 않다면 예외 발생
+                    .getClaim(EMAIL_CLAIM) // claim(Email) 가져오기
+                    .asString());
         } catch (Exception e) {
-            log.error("액세스 토큰이 유효하지 않습니다.");
+            log.error("액세스 토큰이 유효하지 않습니다");
             return Optional.empty();
         }
     }
 
-    /**
-     * AccessToken 헤더 설정
-     */
+    // AccessToken 헤더 설정
     public void setAccessTokenHeader(HttpServletResponse response, String accessToken) {
         response.setHeader(accessHeader, "Bearer " + accessToken);
     }
 
-    /**
-     * RefreshToken 헤더 설정
-     */
+    // RefreshToken 헤더 설정
     public void setRefreshTokenHeader(HttpServletResponse response, String refreshToken) {
         response.setHeader(refreshHeader, "Bearer " + refreshToken);
     }
 
-    /**
-     * RefreshToken DB 저장(업데이트)
-     */
+    // RefreshToken DB 저장(업데이트)
     @Transactional(readOnly = true)
     public void updateRefreshToken(String email, String refreshToken) {
         userRepository.findByEmail(email)
@@ -171,15 +151,15 @@ public class JwtService {
 
     public boolean isTokenValid(String token) {
         try {
-            Jwts.parser()
-                    .setSigningKey(secretKey) // 토큰을 검증할 때 사용할 서명 키를 설정합니다.
-                    .requireIssuer("issuer") // 발급자(issuer) 검증을 요구합니다.
-                    .requireAudience("audience") // 대상 청중(audience) 검증을 요구합니다.
-                    .parseClaimsJws(token); // 토큰을 파싱하고 검증합니다.
-            return true; // 검증에 성공하면 토큰이 유효합니다.
+            JWT.require(Algorithm.HMAC512(secretKey)).build().verify(token);
+            return true;
         } catch (Exception e) {
             log.error("유효하지 않은 토큰입니다. {}", e.getMessage());
-            return false; // 검증에 실패하면 토큰이 유효하지 않습니다.
+            return false;
         }
+    }
+
+    public String resolveRefreshToken(HttpServletRequest request) {
+        return request.getHeader(refreshHeader);
     }
 }

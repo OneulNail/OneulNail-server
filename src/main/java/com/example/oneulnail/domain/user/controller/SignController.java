@@ -5,7 +5,6 @@ import com.example.oneulnail.domain.user.dto.request.SignUpReqDto;
 import com.example.oneulnail.domain.user.dto.response.SignInResDto;
 import com.example.oneulnail.domain.user.dto.response.SignMessageResDto;
 import com.example.oneulnail.domain.user.dto.response.SignUpResDto;
-import com.example.oneulnail.global.config.security.JwtTokenProvider;
 import com.example.oneulnail.global.entity.BaseResponse;
 import com.example.oneulnail.global.exception.BadRequestException;
 import com.example.oneulnail.domain.user.service.SignService;
@@ -36,28 +35,26 @@ public class SignController {
     final DefaultMessageService messageService;
     private final Logger LOGGER = LoggerFactory.getLogger(SignController.class);
     private final SignService signService;
-    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    public SignController(SignService signService, JwtTokenProvider jwtTokenProvider,
+    public SignController(SignService signService,
                           @Value("${COOLSMS_API_KEY}") String apiKey,
                           @Value("${COOLSMS_API_SECRET}") String apiSecret ) {
         this.messageService = NurigoApp.INSTANCE.initialize(
                 apiKey, apiSecret, "https://api.coolsms.co.kr");
         this.signService = signService;
-        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @PostMapping(value = "/sign-in")
     public BaseResponse<SignInResDto> signIn(@ApiParam(value = "User-Login", required = true) @RequestBody SignInReqDto signInReqDto) throws IOException {
-        if (signInReqDto.getPhone_num() == null) {
-            throw new BadRequestException(USERS_EMPTY_USER_PHONE_NUMBER);
+        if (signInReqDto.getEmail() == null) {
+            throw new BadRequestException(USERS_EMPTY_USER_EMAIL);
         }
         if (signInReqDto.getPassword() == null) {
             throw new BadRequestException(USERS_EMPTY_USER_PASSWORD);
         }
 
-        SignInResDto signInResDto = signService.signIn(signInReqDto.getPhone_num(), signInReqDto.getPassword());
+        SignInResDto signInResDto = signService.signIn(signInReqDto.getEmail(), signInReqDto.getPassword());
         return BaseResponse.onSuccess(signInResDto);
     }
 
@@ -65,7 +62,7 @@ public class SignController {
     public BaseResponse<SignUpResDto> signUp(
             @ApiParam(value = "User-Join", required = true) @RequestBody SignUpReqDto signUpReqDto) throws IOException{
 
-        if(signUpReqDto.getPhoneNum()==null) throw new BadRequestException(USERS_EMPTY_USER_PHONE_NUMBER);
+        if(signUpReqDto.getPhoneNum()==null) throw new BadRequestException(USERS_EMPTY_USER_EMAIL);
         if(signUpReqDto.getPassword()==null)throw new BadRequestException(USERS_EMPTY_USER_PASSWORD);
         if(signUpReqDto.getName()==null) throw new BadRequestException(POST_USERS_EMPTY_NAME);
           SignUpResDto signUpResDto = signService.signUp(signUpReqDto);
