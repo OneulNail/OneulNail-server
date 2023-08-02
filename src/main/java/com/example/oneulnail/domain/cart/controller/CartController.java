@@ -42,12 +42,12 @@ public class CartController {
             @LoginUser User user,
             @PathVariable("cartId") Long cartId){
         cartService.deleteCart(user,cartId);
-        return BaseResponse.onSuccess(cartId +"삭제 완료");
+        return BaseResponse.onSuccess("CartId "+cartId +" 삭제 완료");
     }
 
     @DeleteMapping
     public BaseResponse<String> deleteCarts(@LoginUser User user){
         cartService.deleteCarts(user);
-        return BaseResponse.onSuccess("삭제가 완료되었습니다.");
+        return BaseResponse.onSuccess("장바구니를 모두 비웠습니다.");
     }
 }
