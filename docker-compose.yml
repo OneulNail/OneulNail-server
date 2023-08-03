@@ -1,0 +1,36 @@
+version: "2.1"
+
+services:
+  backend:
+    container_name: backend
+    build:
+      context: ./
+    ports:
+      - '8080:8080'
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - network-tier
+    tty: true
+    restart: on-failure
+
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    ports:
+      - '3306:3306'
+    environment:
+      - MYSQL_DATABASE=oneulnail
+      - MYSQL_ROOT_PASSWORD=s1224512
+    networks:
+      - network-tier
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  network-tier:
+    driver: bridge

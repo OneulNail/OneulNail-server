@@ -8,14 +8,11 @@ import com.example.oneulnail.domain.likeStyle.mapper.LikeStyleMapper;
 import com.example.oneulnail.domain.post.dto.response.PostInfoResDto;
 import com.example.oneulnail.domain.post.service.PostService;
 import com.example.oneulnail.domain.user.entity.User;
-import com.example.oneulnail.global.config.security.oauth2.service.AuthService;
 import com.example.oneulnail.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,21 +21,16 @@ import java.util.List;
 public class LikeStyleService {
     private final LikeStyleRepository likeStyleRepository;
     private final LikeStyleMapper likeStyleMapper;
-    private final AuthService authService;
     private final PostService postService;
 
     @Transactional
-    public LikeStyleRegisterResDto register(HttpServletRequest request, LikeStyleRegisterReqDto requestDto){
-        String email = authService.extractEmailFromJwt(request);
-        User foundUser = authService.findUserByEmail(email);
+    public LikeStyleRegisterResDto register(User foundUser, LikeStyleRegisterReqDto requestDto){
         LikeStyle newLikeStyle = buildLikeStyle(foundUser, requestDto);
         return saveAndReturnResponse(newLikeStyle);
     }
 
     @Transactional(readOnly = true)
-    public List<PostInfoResDto> findTopThreePostsForEachStyle(HttpServletRequest request) {
-        String email = authService.extractEmailFromJwt(request);
-        User foundUser = authService.findUserByEmail(email);
+    public List<PostInfoResDto> findTopThreePostsForEachStyle(User foundUser) {
         LikeStyle foundLikeStyle = likeStyleRepository.findLikeStyleByUser(foundUser)
                 .orElseThrow(() -> new NotFoundException("선호스타일이 없습니다."));
 

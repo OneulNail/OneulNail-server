@@ -1,19 +1,16 @@
 package com.example.oneulnail.domain.user.dto.request;
 
 import com.example.oneulnail.global.config.security.oauth2.entity.Role;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-@Data
+@Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class SignUpReqDto {
 
-    private String phone_num;
+    private String email;
+
+    private String phoneNum;
 
     private String password;
 

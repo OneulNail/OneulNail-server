@@ -5,15 +5,19 @@ import com.example.oneulnail.domain.reservation.dto.request.ReservationRegisterR
 import com.example.oneulnail.domain.reservation.dto.response.ReservationInfoResDto;
 import com.example.oneulnail.domain.reservation.dto.response.ReservationRegisterResDto;
 import com.example.oneulnail.domain.reservation.service.ReservationService;
+import com.example.oneulnail.domain.user.entity.User;
+import com.example.oneulnail.global.annotation.LoginUser;
 import com.example.oneulnail.global.entity.BaseResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-
+@Tag(name = "예약")
 @RestController
 @RequestMapping("/reservation")
 @RequiredArgsConstructor
@@ -21,14 +25,16 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
+    @Operation(summary = "예약 등록")
     @PostMapping
     public BaseResponse<ReservationRegisterResDto> register(
-            HttpServletRequest request,
+            @Parameter(hidden = true) @LoginUser User user,
             @RequestBody ReservationRegisterReqDto reservationRegisterReqDto) {
-        ReservationRegisterResDto registerResDto = reservationService.register(request, reservationRegisterReqDto);
+        ReservationRegisterResDto registerResDto = reservationService.register(user, reservationRegisterReqDto);
         return BaseResponse.onSuccess(registerResDto);
     }
 
+    @Operation(summary = "가게별 예약 조회")
     @GetMapping("/{shopId}")
     public BaseResponse<Slice<ReservationInfoResDto>> findAllByShopId(
             @PathVariable Long shopId,
@@ -39,6 +45,7 @@ public class ReservationController {
         return BaseResponse.onSuccess(reservationInfoResDtoList);
     }
 
+    @Operation(summary = "예약 전체 조회")
     @GetMapping
     public BaseResponse<Slice<ReservationInfoResDto>> findAll(
             @RequestParam(defaultValue = "0") int page,
