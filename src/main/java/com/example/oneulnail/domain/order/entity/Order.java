@@ -23,17 +23,23 @@ public class Order extends BaseEntity {
     @Column(name="totalPrice")
     private int totalPrice;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private OrderStatus status;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
     @Builder
-    public Order(String paymentMethod, int totalPrice, String status){
+    public Order(String paymentMethod, int totalPrice, OrderStatus status,User user){
         this.paymentMethod = paymentMethod;
         this.totalPrice = totalPrice;
+        this.status = status;
+        this.user = user;
+    }
+
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 }

@@ -3,6 +3,7 @@ package com.example.oneulnail.domain.order.mapper;
 import com.example.oneulnail.domain.order.dto.response.OrderInfoResDto;
 import com.example.oneulnail.domain.order.dto.response.OrderRegisterResDto;
 import com.example.oneulnail.domain.order.entity.Order;
+import com.example.oneulnail.domain.order.entity.OrderStatus;
 import org.springframework.stereotype.Component;
 
 @Component
