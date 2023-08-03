@@ -8,12 +8,13 @@ import com.example.oneulnail.domain.user.dto.response.SignUpResDto;
 import com.example.oneulnail.global.entity.BaseResponse;
 import com.example.oneulnail.global.exception.BadRequestException;
 import com.example.oneulnail.domain.user.service.SignService;
-import io.swagger.annotations.ApiParam;
 
 
 import java.io.IOException;
 import java.util.Random;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
@@ -28,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import static com.example.oneulnail.global.constants.BaseResponseStatus.*;
 
+@Tag(name = "자체 로그인, 회원가입")
 @RestController
 @RequestMapping("/user")
 public class SignController {
@@ -45,8 +47,9 @@ public class SignController {
         this.signService = signService;
     }
 
+    @Operation(summary = "자체 로그인")
     @PostMapping(value = "/sign-in")
-    public BaseResponse<SignInResDto> signIn(@ApiParam(value = "User-Login", required = true) @RequestBody SignInReqDto signInReqDto) throws IOException {
+    public BaseResponse<SignInResDto> signIn(@RequestBody SignInReqDto signInReqDto) throws IOException {
         if (signInReqDto.getEmail() == null) {
             throw new BadRequestException(USERS_EMPTY_USER_EMAIL);
         }
@@ -58,14 +61,14 @@ public class SignController {
         return BaseResponse.onSuccess(signInResDto);
     }
 
+    @Operation(summary = "자체 회원가입")
     @PostMapping(value = "/sign-up")
-    public BaseResponse<SignUpResDto> signUp(
-            @ApiParam(value = "User-Join", required = true) @RequestBody SignUpReqDto signUpReqDto) throws IOException{
+    public BaseResponse<SignUpResDto> signUp(@RequestBody SignUpReqDto signUpReqDto) throws IOException{
 
         if(signUpReqDto.getPhoneNum()==null) throw new BadRequestException(USERS_EMPTY_USER_EMAIL);
         if(signUpReqDto.getPassword()==null)throw new BadRequestException(USERS_EMPTY_USER_PASSWORD);
         if(signUpReqDto.getName()==null) throw new BadRequestException(POST_USERS_EMPTY_NAME);
-          SignUpResDto signUpResDto = signService.signUp(signUpReqDto);
+        SignUpResDto signUpResDto = signService.signUp(signUpReqDto);
 
         LOGGER.info("회원가입을 완료. 전화번호 : {}", signUpReqDto.getPhoneNum());
         return BaseResponse.onSuccess(signUpResDto);
