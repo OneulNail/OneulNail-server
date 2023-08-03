@@ -5,6 +5,7 @@ import com.example.oneulnail.domain.product.entity.Product;
 import com.example.oneulnail.domain.shop.entity.Shop;
 import com.example.oneulnail.domain.user.entity.User;
 import com.example.oneulnail.global.entity.BaseEntity;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,4 +33,11 @@ public class Cart extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @Builder
+    public Cart(int quantity, User user, Product product){
+        this.quantity = quantity;
+        this.user = user;
+        this.product = product;
+    }
 }

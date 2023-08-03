@@ -65,6 +65,7 @@ public class SecurityConfig {
                 // 기본 페이지, css, image, js 하위 폴더에 있는 자료들은 모두 접근 가능, h2-console에 접근 가능
                 .antMatchers("/**").permitAll()
                 .antMatchers("/","/css/**","/images/**","/js/**","/favicon.ico","/h2-console/**").permitAll()
+                .antMatchers("/**").permitAll()
                 .antMatchers("/user/sign-up","/user/sign-in").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/swagger-ui/index.html", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
