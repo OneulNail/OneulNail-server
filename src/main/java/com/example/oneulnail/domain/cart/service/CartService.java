@@ -15,6 +15,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CartService {
@@ -71,5 +73,9 @@ public class CartService {
 
     private void removeCart(Cart cart){
         cartRepository.delete(cart);
+    }
+
+    public List<Cart> findCartByUserIdNotOrder(User user){
+        return cartRepository.findCartByUserIdNotOrder(user.getId());
     }
 }

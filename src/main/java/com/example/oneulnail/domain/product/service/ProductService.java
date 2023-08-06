@@ -32,8 +32,11 @@ public class ProductService {
                 .name(productRegisterReqDto.getName())
                 .imgUrl(productRegisterReqDto.getImgUrl())
                 .price(productRegisterReqDto.getPrice())
+                .likeCount(0)
+                .category(productRegisterReqDto.getCategory())
                 .build();
     }
+
     @Transactional(readOnly = true)
     public ProductInfoResDto findDtoById(Long productId) {
         Product foundProduct = findById(productId);

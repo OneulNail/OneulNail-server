@@ -14,7 +14,7 @@ public class OrderMapper {
                 .build();
     }
 
-    public OrderInfoResDto orderInfoEntityToDto(Order order){
+    public OrderInfoResDto orderEntityToOrderInfoDto(Order order){
         return OrderInfoResDto.builder()
                 .orderId(order.getId())
                 .paymentMethod(order.getPaymentMethod())

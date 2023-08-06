@@ -20,6 +20,9 @@ public class Post extends BaseEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "location")
+    private String location;
+
     @Column(name = "like_count")
     private int likeCount;
 
@@ -40,8 +43,9 @@ public class Post extends BaseEntity {
     private Shop shop;
 
     @Builder
-    public Post(String name, int likeCount, String imgUrl, int price, String content, String category, Shop shop) {
+    public Post(String name, String location, int likeCount, String imgUrl, int price, String content, String category, Shop shop) {
         this.name = name;
+        this.location = location;
         this.likeCount = likeCount;
         this.imgUrl = imgUrl;
         this.price = price;

@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderRegisterReqDto {
 
-    private Long orderId;
     private String paymentMethod;
     private int totalPrice;
-    private String status;
 }

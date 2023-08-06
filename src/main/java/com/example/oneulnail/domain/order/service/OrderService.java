@@ -29,8 +29,6 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
-    private final CartRepository cartRepository;
-
     private final CartService cartService;
     private final OrderMapper orderMapper;
 
@@ -41,17 +39,10 @@ public class OrderService {
         Order newOrder = buildOrder(orderRegisterReqDto, user);
         Order registerOrder = orderRepository.save(newOrder); //주문생성
 
-        List<Cart> carts = findCartByUserIdNotOrder(user);
-        carts.forEach(cart -> cart.setOrder(registerOrder));
-        cartRepository.saveAll(carts); // cart에 주문 ID 지정
+        List<Cart> carts = cartService.findCartByUserIdNotOrder(user);
+        carts.forEach(cart -> cart.updateOrder(registerOrder));
         return orderMapper.orderEntityToDto(registerOrder);
     }
-
-    private List<Cart> findCartByUserIdNotOrder(User user){
-        return cartRepository.findCartByUserIdNotOrder(user.getId());
-    }
-
-
 
     private Order buildOrder(OrderRegisterReqDto orderRegisterReqDto,User user){
         return Order.builder()
@@ -65,21 +56,20 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Slice<OrderInfoResDto> findAll(User user, Pageable pageable){
         Slice<Order> orders = orderRepository.findAllSlice(user.getId(), pageable);
-        return orders.map(order -> orderMapper.orderInfoEntityToDto(order));
+        return orders.map(order -> orderMapper.orderEntityToOrderInfoDto(order));
     }
 
     @Transactional(readOnly = true)
     public void cancelOrder(Long orderId){
         Order order =  orderRepository.findById(orderId).orElseThrow(()->new NotFoundException("orderId Not Found"));
-        order.setStatus(OrderStatus.ORDER_CANCELED);
-        orderRepository.save(order);
+        order.updateStatus(OrderStatus.ORDER_CANCELED);
     }
 
 
     @Transactional(readOnly = true)
     public Slice<OrderInfoResDto> findAllByStatus(User user, OrderStatus status, Pageable pageable) {
         Slice<Order> pageResult = orderRepository.findByStatusSlice(user.getId(), status, pageable);
-        return pageResult.map(order -> orderMapper.orderInfoEntityToDto(order));
+        return pageResult.map(order -> orderMapper.orderEntityToOrderInfoDto(order));
     }
 
 }

@@ -39,7 +39,7 @@ public class Order extends BaseEntity {
         this.user = user;
     }
 
-    public void setStatus(OrderStatus status) {
+    public void updateStatus(OrderStatus status) {
         this.status = status;
     }
 }
