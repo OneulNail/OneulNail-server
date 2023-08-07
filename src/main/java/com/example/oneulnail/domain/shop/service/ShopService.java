@@ -62,5 +62,4 @@ public class ShopService {
         Slice<Shop> shops = shopRepository.findAllSlice(pageable);
         return shops.map(shop -> shopMapper.entityToShopListResDto(shop));
     }
-
 }

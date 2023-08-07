@@ -15,6 +15,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CartService {
@@ -31,7 +33,7 @@ public class CartService {
 
     @Transactional(readOnly = true)
     public Slice<CartInfoResDto> findCartByUserIdSlice(User foundUser, Pageable pageable) {
-        Slice<Cart> carts = cartRepository.findCartByUserIdSlice(foundUser.getId(),pageable);
+        Slice<Cart> carts = findCartByUserId(foundUser,pageable);
         return carts.map(cart->cartMapper.cartEntityToCartInfo(cart));
     }
     @Transactional
@@ -41,8 +43,12 @@ public class CartService {
     }
     @Transactional
     public void deleteCarts(User user) {
-        Slice<Cart> carts = cartRepository.findCartByUserIdSlice(user.getId(),null);
+        Slice<Cart> carts = findCartByUserId(user,null);
         carts.forEach(this::removeCart);
+    }
+
+    public Slice<Cart> findCartByUserId(User foundUser, Pageable pageable){
+        return cartRepository.findCartByUserIdSlice(foundUser.getId(),pageable);
     }
 
     private Product findProduct(CartAddReqDto cartAddReqDto){
@@ -67,5 +73,9 @@ public class CartService {
 
     private void removeCart(Cart cart){
         cartRepository.delete(cart);
+    }
+
+    public List<Cart> findCartByUserIdNotOrder(User user){
+        return cartRepository.findCartByUserIdNotOrder(user.getId());
     }
 }

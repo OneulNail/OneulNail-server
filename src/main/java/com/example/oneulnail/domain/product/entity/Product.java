@@ -23,10 +23,17 @@ public class Product extends BaseEntity {
 
     private int price;
 
+    private int likeCount;
+
+    @Enumerated(EnumType.STRING)
+    private ProductCategory category;
+
     @Builder
-    public Product(String name, String imgUrl,int price){
+    public Product(String name, String imgUrl,int price, int likeCount, ProductCategory category){
         this.name = name;
         this.imgUrl = imgUrl;
         this.price = price;
+        this.likeCount = likeCount;
+        this.category = category;
     }
 }

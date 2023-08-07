@@ -38,6 +38,7 @@ public class PostService {
         return Post.builder()
                 .shop(shop)
                 .name(postRegisterReqDto.getName())
+                .location(shop.getLocation())
                 .likeCount(0)
                 .imgUrl(postRegisterReqDto.getImgUrl())
                 .price(postRegisterReqDto.getPrice())
