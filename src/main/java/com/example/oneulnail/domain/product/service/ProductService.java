@@ -21,16 +21,16 @@ public class ProductService {
     private final ProductMapper productMapper;
 
     @Transactional
-    public ProductRegisterResDto register(ProductRegisterReqDto productRegisterReqDto) {
-        Product newProduct = buildProduct(productRegisterReqDto);
+    public ProductRegisterResDto register(ProductRegisterReqDto productRegisterReqDto, String imageUrl) {
+        Product newProduct = buildProduct(productRegisterReqDto,imageUrl);
         Product registerProduct = productRepository.save(newProduct);
         return productMapper.productEntityToDto(registerProduct);
     }
 
-    private Product buildProduct(ProductRegisterReqDto productRegisterReqDto){
+    private Product buildProduct(ProductRegisterReqDto productRegisterReqDto,String imageUrl){
         return Product.builder()
                 .name(productRegisterReqDto.getName())
-                .imgUrl(productRegisterReqDto.getImgUrl())
+                .imgUrl(imageUrl)
                 .price(productRegisterReqDto.getPrice())
                 .likeCount(0)
                 .category(productRegisterReqDto.getCategory())
