@@ -7,12 +7,16 @@ import com.example.oneulnail.domain.shop.dto.response.ShopRegisterResDto;
 import com.example.oneulnail.domain.shop.entity.Shop;
 import com.example.oneulnail.domain.shop.mapper.ShopMapper;
 import com.example.oneulnail.domain.shop.repository.ShopRepository;
+import com.example.oneulnail.global.constants.S3Upload;
 import com.example.oneulnail.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -20,21 +24,22 @@ public class ShopService {
 
     private final ShopRepository shopRepository;
     private final ShopMapper shopMapper;
+    private final S3Upload s3Upload;
 
     @Transactional
-    public ShopRegisterResDto register(ShopRegisterReqDto requestDto) {
-        Shop newShop = buildShop(requestDto);
+    public ShopRegisterResDto register(ShopRegisterReqDto requestDto,String imageUrl) throws IOException {
+        Shop newShop = buildShop(requestDto,imageUrl);
         return saveAndReturnResponse(newShop);
     }
 
-    private Shop buildShop(ShopRegisterReqDto shopRegisterReqDto) {
+    private Shop buildShop(ShopRegisterReqDto shopRegisterReqDto, String imageUrl) {
         return Shop.builder()
                 .name(shopRegisterReqDto.getName())
                 .phoneNumber(shopRegisterReqDto.getPhoneNumber())
                 .location(shopRegisterReqDto.getLocation())
                 .operatingHours(shopRegisterReqDto.getOperatingHours())
                 .likesCount(0)
-                .imgUrl(shopRegisterReqDto.getImgUrl())
+                .imgUrl(imageUrl)
                 .basePrice(shopRegisterReqDto.getBasePrice())
                 .shopInfo(shopRegisterReqDto.getShopInfo())
                 .build();
