@@ -1,7 +1,7 @@
 package com.example.oneulnail.global.resolver;
 
 import com.example.oneulnail.global.annotation.LoginUser;
-import com.example.oneulnail.global.config.security.oauth2.service.AuthService;
+import com.example.oneulnail.domain.oauth2.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;

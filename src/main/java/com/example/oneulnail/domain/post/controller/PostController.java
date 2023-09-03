@@ -4,13 +4,15 @@ import com.example.oneulnail.domain.post.dto.request.PostRegisterReqDto;
 import com.example.oneulnail.domain.post.dto.response.PostInfoResDto;
 import com.example.oneulnail.domain.post.dto.response.PostRegisterResDto;
 import com.example.oneulnail.domain.post.service.PostService;
-import com.example.oneulnail.global.entity.BaseResponse;
+import com.example.oneulnail.global.response.ResultCode;
+import com.example.oneulnail.global.response.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "게시글")
@@ -23,48 +25,48 @@ public class PostController {
 
     @Operation(summary = "게시글 등록")
     @PostMapping
-    public BaseResponse<PostRegisterResDto> register(@RequestBody PostRegisterReqDto postRegisterReqDto) {
+    public ResponseEntity<ResultResponse> register(@RequestBody PostRegisterReqDto postRegisterReqDto) {
         PostRegisterResDto postRegisterResDto = postService.register(postRegisterReqDto);
-        return BaseResponse.onSuccess(postRegisterResDto);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.POST_CREATE_SUCCESS, postRegisterResDto));
     }
 
     @Operation(summary = "게시글 단일 조회")
     @GetMapping("/{postId}")
-    public BaseResponse<PostInfoResDto> findByPostId(@PathVariable Long postId) {
+    public ResponseEntity<ResultResponse> findByPostId(@PathVariable Long postId) {
         PostInfoResDto postFindOneResDto = postService.findDtoById(postId);
-        return BaseResponse.onSuccess(postFindOneResDto);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.GET_ONE_POST_SUCCESS, postFindOneResDto));
     }
 
     @Operation(summary = "게시글 전체 조회")
     @GetMapping
-    public BaseResponse<Slice<PostInfoResDto>> findAll(
+    public ResponseEntity<ResultResponse> findAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Slice<PostInfoResDto> posts = postService.findAll(pageable);
-        return BaseResponse.onSuccess(posts);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.GET_ALL_POST_SUCCESS, posts));
     }
 
     @Operation(summary = "가게별 게시글 조회")
     @GetMapping("/shop/{shopId}")
-    public BaseResponse<Slice<PostInfoResDto>> findAllByShopId(
+    public ResponseEntity<ResultResponse> findAllByShopId(
             @PathVariable Long shopId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Slice<PostInfoResDto> posts = postService.findAllByShopId(shopId, pageable);
-        return BaseResponse.onSuccess(posts);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.GET_ALL_POST_BY_SHOP_SUCCESS, posts));
     }
 
     @Operation(summary = "카테고리별 게시글 조회")
     @GetMapping("/category/{category}")
-    public BaseResponse<Slice<PostInfoResDto>> findAllByCategory(
+    public ResponseEntity<ResultResponse> findAllByCategory(
             @PathVariable String category,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
             ) {
         Pageable pageable = PageRequest.of(page, size);
         Slice<PostInfoResDto> posts = postService.findAllByCategory(category, pageable);
-        return BaseResponse.onSuccess(posts);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.GET_ALL_POST_BY_CATEGORY_SUCCESS, posts));
     }
 }

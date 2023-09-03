@@ -7,13 +7,15 @@ import com.example.oneulnail.domain.user.dto.response.SignUpResDto;
 import com.example.oneulnail.domain.user.entity.RefreshToken;
 import com.example.oneulnail.domain.user.entity.Status;
 import com.example.oneulnail.domain.user.entity.User;
+import com.example.oneulnail.domain.user.exception.EmailExistsException;
+import com.example.oneulnail.domain.user.exception.ExpiredJwtException;
+import com.example.oneulnail.domain.user.exception.FailedToPasswordException;
+import com.example.oneulnail.domain.user.exception.NotFoundUserEntityException;
 import com.example.oneulnail.domain.user.mapper.SignMapper;
 import com.example.oneulnail.domain.user.repository.RedisRepository;
 import com.example.oneulnail.domain.user.repository.UserRepository;
 
 import com.example.oneulnail.global.config.security.jwt.service.JwtService;
-import com.example.oneulnail.global.exception.BadRequestException;
-import com.example.oneulnail.global.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 
 
 import java.util.Optional;
-
-import static com.example.oneulnail.global.constants.BaseResponseStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -42,21 +42,20 @@ public class SignService {
     @Transactional
     public SignUpResDto signUp(SignUpReqDto signUpReqDto) {
         if(userRepository.findByEmail(signUpReqDto.getEmail()).isPresent()){
-            throw new BadRequestException(USERS_EXISTS_EMAIL);
+            throw new EmailExistsException();
         }
         User newUser = buildUser(signUpReqDto);
-
-       User savedUser = userRepository.save(newUser);
+        userRepository.save(newUser);
 
         return signMapper.signUpEntityToDto();
     }
 
     @Transactional(readOnly = true)
     public SignInResDto signIn(String email, String password) throws RuntimeException {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new BadRequestException(USER_NOT_FOUND));
+        User user = userRepository.findByEmail(email).orElseThrow(NotFoundUserEntityException::new);
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new BadRequestException(FAILED_TO_PASSWORD);
+            throw new FailedToPasswordException();
         }
 
         SignInResDto token = jwtService.createToken(email); //atk,rtk 생성
@@ -87,6 +86,6 @@ public class SignService {
                 .map(redisRepository::findByRefreshToken) // Redis에서 RefreshToken 찾기
                 .map(foundRefreshToken -> jwtService.createAccessToken(foundRefreshToken.getId())) // Redis 에 저장된 RefreshToken 정보를 기반으로 AccessToken 생성
                 .map(accessToken -> signMapper.signInAccessEntityToDto(accessToken)) // 매핑
-                .orElseThrow(() -> new UnauthorizedException(EXPIRED_JWT_EXCEPTION));
+                .orElseThrow(ExpiredJwtException::new);
     }
 }

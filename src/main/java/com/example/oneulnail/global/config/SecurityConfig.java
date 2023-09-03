@@ -6,9 +6,9 @@ import com.example.oneulnail.global.config.security.login.filter.CustomJsonUsern
 import com.example.oneulnail.global.config.security.login.handler.LoginFailureHandler;
 import com.example.oneulnail.global.config.security.login.handler.LoginSuccessHandler;
 import com.example.oneulnail.global.config.security.login.service.LoginService;
-import com.example.oneulnail.global.config.security.oauth2.handler.OAuth2LoginFailureHandler;
-import com.example.oneulnail.global.config.security.oauth2.handler.OAuth2LoginSuccessHandler;
-import com.example.oneulnail.global.config.security.oauth2.service.CustomOAuth2UserService;
+import com.example.oneulnail.domain.oauth2.handler.OAuth2LoginFailureHandler;
+import com.example.oneulnail.domain.oauth2.handler.OAuth2LoginSuccessHandler;
+import com.example.oneulnail.domain.oauth2.service.CustomOAuth2UserService;
 import com.example.oneulnail.domain.user.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

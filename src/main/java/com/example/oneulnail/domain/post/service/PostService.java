@@ -4,19 +4,17 @@ import com.example.oneulnail.domain.post.dto.request.PostRegisterReqDto;
 import com.example.oneulnail.domain.post.dto.response.PostInfoResDto;
 import com.example.oneulnail.domain.post.dto.response.PostRegisterResDto;
 import com.example.oneulnail.domain.post.entity.Post;
+import com.example.oneulnail.domain.post.exception.NotFoundPostEntityException;
 import com.example.oneulnail.domain.post.mapper.PostMapper;
 import com.example.oneulnail.domain.post.repository.PostRepository;
 import com.example.oneulnail.domain.shop.entity.Shop;
 import com.example.oneulnail.domain.shop.service.ShopService;
-import com.example.oneulnail.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -55,7 +53,7 @@ public class PostService {
     @Transactional(readOnly = true)
     public Post findById(Long postId) {
         return postRepository.findById(postId)
-                .orElseThrow(() -> new NotFoundException("Post Not Found"));
+                .orElseThrow(NotFoundPostEntityException::new);
     }
 
     @Transactional(readOnly = true)

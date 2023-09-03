@@ -4,9 +4,9 @@ import com.example.oneulnail.domain.product.dto.request.ProductRegisterReqDto;
 import com.example.oneulnail.domain.product.dto.response.ProductInfoResDto;
 import com.example.oneulnail.domain.product.dto.response.ProductRegisterResDto;
 import com.example.oneulnail.domain.product.entity.Product;
+import com.example.oneulnail.domain.product.exception.NotFoundProductEntityException;
 import com.example.oneulnail.domain.product.mapper.ProductMapper;
 import com.example.oneulnail.domain.product.repository.ProductRepository;
-import com.example.oneulnail.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -45,7 +45,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public Product findById(Long productId){
-        return productRepository.findById(productId).orElseThrow(()->new NotFoundException("Product Not Found"));
+        return productRepository.findById(productId).orElseThrow(NotFoundProductEntityException::new);
     }
     @Transactional(readOnly = true)
     public Slice<ProductInfoResDto> findAll(Pageable pageable) {

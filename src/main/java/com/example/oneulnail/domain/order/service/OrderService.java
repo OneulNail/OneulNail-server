@@ -1,18 +1,17 @@
 package com.example.oneulnail.domain.order.service;
 
 import com.example.oneulnail.domain.cart.entity.Cart;
-import com.example.oneulnail.domain.cart.repository.CartRepository;
 import com.example.oneulnail.domain.cart.service.CartService;
 import com.example.oneulnail.domain.order.dto.request.OrderRegisterReqDto;
 import com.example.oneulnail.domain.order.dto.response.OrderInfoResDto;
 import com.example.oneulnail.domain.order.dto.response.OrderRegisterResDto;
 import com.example.oneulnail.domain.order.entity.Order;
 import com.example.oneulnail.domain.order.entity.OrderStatus;
+import com.example.oneulnail.domain.order.exception.NotFoundOrderEntityException;
 import com.example.oneulnail.domain.order.mapper.OrderMapper;
 import com.example.oneulnail.domain.order.repository.OrderRepository;
 import com.example.oneulnail.domain.user.controller.SignController;
 import com.example.oneulnail.domain.user.entity.User;
-import com.example.oneulnail.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +60,7 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public void cancelOrder(Long orderId){
-        Order order =  orderRepository.findById(orderId).orElseThrow(()->new NotFoundException("orderId Not Found"));
+        Order order = orderRepository.findById(orderId).orElseThrow(NotFoundOrderEntityException::new);
         order.updateStatus(OrderStatus.ORDER_CANCELED);
     }
 
