@@ -5,14 +5,13 @@ import com.example.oneulnail.domain.user.dto.request.SignUpReqDto;
 import com.example.oneulnail.domain.user.dto.response.SignInResDto;
 import com.example.oneulnail.domain.user.dto.response.SignMessageResDto;
 import com.example.oneulnail.domain.user.dto.response.SignUpResDto;
-import com.example.oneulnail.global.entity.BaseResponse;
-import com.example.oneulnail.global.exception.BadRequestException;
 import com.example.oneulnail.domain.user.service.SignService;
 
 
-import java.io.IOException;
 import java.util.Random;
 
+import com.example.oneulnail.global.response.ResultCode;
+import com.example.oneulnail.global.response.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import net.nurigo.sdk.NurigoApp;
@@ -23,11 +22,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.example.oneulnail.global.constants.BaseResponseStatus.*;
 
 @Tag(name = "자체 로그인, 회원가입")
 @RestController
@@ -49,34 +48,23 @@ public class SignController {
 
     @Operation(summary = "자체 로그인")
     @PostMapping(value = "/sign-in")
-    public BaseResponse<SignInResDto> signIn(@RequestBody SignInReqDto signInReqDto) throws IOException {
-        if (signInReqDto.getEmail() == null) {
-            throw new BadRequestException(USERS_EMPTY_USER_EMAIL);
-        }
-        if (signInReqDto.getPassword() == null) {
-            throw new BadRequestException(USERS_EMPTY_USER_PASSWORD);
-        }
-
+    public ResponseEntity<ResultResponse> signIn(@RequestBody SignInReqDto signInReqDto) {
         SignInResDto signInResDto = signService.signIn(signInReqDto.getEmail(), signInReqDto.getPassword());
-        return BaseResponse.onSuccess(signInResDto);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.USER_LOGIN_SUCCESS, signInResDto));
     }
 
     @Operation(summary = "자체 회원가입")
     @PostMapping(value = "/sign-up")
-    public BaseResponse<SignUpResDto> signUp(@RequestBody SignUpReqDto signUpReqDto) throws IOException{
-
-        if(signUpReqDto.getPhoneNum()==null) throw new BadRequestException(USERS_EMPTY_USER_EMAIL);
-        if(signUpReqDto.getPassword()==null)throw new BadRequestException(USERS_EMPTY_USER_PASSWORD);
-        if(signUpReqDto.getName()==null) throw new BadRequestException(POST_USERS_EMPTY_NAME);
+    public ResponseEntity<ResultResponse> signUp(@RequestBody SignUpReqDto signUpReqDto) {
         SignUpResDto signUpResDto = signService.signUp(signUpReqDto);
 
         LOGGER.info("회원가입을 완료. 전화번호 : {}", signUpReqDto.getPhoneNum());
-        return BaseResponse.onSuccess(signUpResDto);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.USER_CREATE_SUCCESS, signUpResDto));
     }
 
     // 인증문자 (단일) 메시지 발송
     @PostMapping("/authentication-message")
-    public BaseResponse<SignMessageResDto> sendMessage(@RequestBody String phone_num) {
+    public ResponseEntity<ResultResponse> sendMessage(@RequestBody String phone_num) {
 
         SignMessageResDto signMessageResDto = new SignMessageResDto();
         Random rand  = new Random();
@@ -96,13 +84,12 @@ public class SignController {
         LOGGER.info("인증번호:"+numStr);
         signMessageResDto.setAuthenticationNumber(numStr);
 
-        return BaseResponse.onSuccess(signMessageResDto);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.USER_AUTHENTICATION_MESSAGE_SEND_SUCCESS, signMessageResDto));
     }
 
     @PostMapping("/reissue")
-    public BaseResponse<SignInResDto> reissue(HttpServletRequest httpServletRequest){
+    public ResponseEntity<ResultResponse> reissue(HttpServletRequest httpServletRequest){
         SignInResDto reissue = signService.reissue(httpServletRequest);
-        return BaseResponse.onSuccess(reissue);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.USER_REISSUE_SUCCESS, reissue));
     }
-
 }

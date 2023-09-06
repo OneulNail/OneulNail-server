@@ -1,6 +1,6 @@
 package com.example.oneulnail.domain.user.entity;
 
-import com.example.oneulnail.global.config.security.oauth2.entity.Role;
+import com.example.oneulnail.domain.oauth2.entity.Role;
 import com.example.oneulnail.global.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;

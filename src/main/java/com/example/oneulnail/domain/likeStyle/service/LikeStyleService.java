@@ -3,12 +3,12 @@ package com.example.oneulnail.domain.likeStyle.service;
 import com.example.oneulnail.domain.likeStyle.dto.request.LikeStyleRegisterReqDto;
 import com.example.oneulnail.domain.likeStyle.dto.response.LikeStyleRegisterResDto;
 import com.example.oneulnail.domain.likeStyle.entity.LikeStyle;
+import com.example.oneulnail.domain.likeStyle.exception.NotFoundLikeStyleEntityException;
 import com.example.oneulnail.domain.likeStyle.repository.LikeStyleRepository;
 import com.example.oneulnail.domain.likeStyle.mapper.LikeStyleMapper;
 import com.example.oneulnail.domain.post.dto.response.PostInfoResDto;
 import com.example.oneulnail.domain.post.service.PostService;
 import com.example.oneulnail.domain.user.entity.User;
-import com.example.oneulnail.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +32,7 @@ public class LikeStyleService {
     @Transactional(readOnly = true)
     public List<PostInfoResDto> findTopThreePostsForEachStyle(User foundUser) {
         LikeStyle foundLikeStyle = likeStyleRepository.findLikeStyleByUser(foundUser)
-                .orElseThrow(() -> new NotFoundException("선호스타일이 없습니다."));
+                .orElseThrow(NotFoundLikeStyleEntityException::new);
 
         List<PostInfoResDto> allPosts = new ArrayList<>();
         allPosts.addAll(postService.findTopThreePostsByStyle(foundLikeStyle.getStyle1()).getContent());

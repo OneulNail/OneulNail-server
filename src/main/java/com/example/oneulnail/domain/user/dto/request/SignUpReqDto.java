@@ -1,6 +1,6 @@
 package com.example.oneulnail.domain.user.dto.request;
 
-import com.example.oneulnail.global.config.security.oauth2.entity.Role;
+import com.example.oneulnail.domain.oauth2.entity.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

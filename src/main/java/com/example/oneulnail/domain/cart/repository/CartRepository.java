@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CartRepository extends JpaRepository<Cart,Long> {
 
@@ -22,7 +23,7 @@ public interface CartRepository extends JpaRepository<Cart,Long> {
     List<Cart> findCartByUserIdNotOrder(@Param("userId") Long userId);
 
     @Query("SELECT c FROM Cart c JOIN c.user u WHERE u.id = :userId and c.id = :cartId")
-    Cart findCartByUserId(@Param("userId") Long userId,@Param("cartId") Long cartId);
+    Optional<Cart> findCartByUserId(@Param("userId") Long userId, @Param("cartId") Long cartId);
 
     @Query("SELECT c FROM Cart c JOIN FETCH c.user u JOIN FETCH c.order o WHERE u.id = :userId AND o.id = :orderId")
     List<Cart> findCartsByUserIdAndOrderId(@Param("userId") Long userId, @Param("orderId") Long orderId);

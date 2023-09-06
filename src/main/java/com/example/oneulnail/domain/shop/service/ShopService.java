@@ -5,10 +5,13 @@ import com.example.oneulnail.domain.shop.dto.response.ShopListResDto;
 import com.example.oneulnail.domain.shop.dto.response.ShopFindOneResDto;
 import com.example.oneulnail.domain.shop.dto.response.ShopRegisterResDto;
 import com.example.oneulnail.domain.shop.entity.Shop;
+import com.example.oneulnail.domain.shop.exception.NotFoundShopEntityException;
 import com.example.oneulnail.domain.shop.mapper.ShopMapper;
 import com.example.oneulnail.domain.shop.repository.ShopRepository;
+
 import com.example.oneulnail.global.constants.S3Upload;
 import com.example.oneulnail.global.exception.NotFoundException;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -53,7 +56,7 @@ public class ShopService {
     @Transactional(readOnly = true)
     public Shop findById(Long shopId) {
         return shopRepository.findById(shopId)
-                .orElseThrow(() -> new NotFoundException("Shop not found"));
+                .orElseThrow(NotFoundShopEntityException::new);
     }
 
     @Transactional(readOnly = true)

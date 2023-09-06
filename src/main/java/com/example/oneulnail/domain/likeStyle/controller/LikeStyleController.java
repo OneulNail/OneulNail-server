@@ -4,13 +4,15 @@ import com.example.oneulnail.domain.likeStyle.dto.response.LikeStyleRegisterResD
 import com.example.oneulnail.domain.post.dto.response.PostInfoResDto;
 import com.example.oneulnail.domain.user.entity.User;
 import com.example.oneulnail.global.annotation.LoginUser;
-import com.example.oneulnail.global.entity.BaseResponse;
 import com.example.oneulnail.domain.likeStyle.dto.request.LikeStyleRegisterReqDto;
 import com.example.oneulnail.domain.likeStyle.service.LikeStyleService;
+import com.example.oneulnail.global.response.ResultCode;
+import com.example.oneulnail.global.response.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,18 +26,18 @@ public class LikeStyleController {
 
     @Operation(summary = "선호스타일 등록")
     @PostMapping
-    public BaseResponse<LikeStyleRegisterResDto> register(
+    public ResponseEntity<ResultResponse> register(
             @Parameter(hidden = true) @LoginUser User user,
             @RequestBody LikeStyleRegisterReqDto likeStyleRegisterReqDto){
         LikeStyleRegisterResDto likeStyleRegisterResDto = likeStyleService.register(user, likeStyleRegisterReqDto);
-        return BaseResponse.onSuccess(likeStyleRegisterResDto);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.LIKE_POST_CREATE_SUCCESS, likeStyleRegisterResDto));
     }
 
     @Operation(summary = "추천 네일 조회")
     @GetMapping
-    public BaseResponse<List<PostInfoResDto>> findTopThreePostsForEachStyle(
+    public ResponseEntity<ResultResponse> findTopThreePostsForEachStyle(
             @Parameter(hidden = true) @LoginUser User user) {
         List<PostInfoResDto> posts = likeStyleService.findTopThreePostsForEachStyle(user);
-        return BaseResponse.onSuccess(posts);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.GET_THREE_LIKE_STYLE_SUCCESS, posts));
     }
 }
