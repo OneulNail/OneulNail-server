@@ -8,8 +8,8 @@ import com.example.oneulnail.domain.user.entity.RefreshToken;
 import com.example.oneulnail.domain.user.entity.Status;
 import com.example.oneulnail.domain.user.entity.User;
 import com.example.oneulnail.domain.user.exception.EmailExistsException;
-import com.example.oneulnail.domain.user.exception.ExpiredJwtException;
 import com.example.oneulnail.domain.user.exception.FailedToPasswordException;
+import com.example.oneulnail.domain.user.exception.ForbiddenException;
 import com.example.oneulnail.domain.user.exception.NotFoundUserEntityException;
 import com.example.oneulnail.domain.user.mapper.SignMapper;
 import com.example.oneulnail.domain.user.repository.RedisRepository;
@@ -86,6 +86,6 @@ public class SignService {
                 .map(redisRepository::findByRefreshToken) // Redis에서 RefreshToken 찾기
                 .map(foundRefreshToken -> jwtService.createAccessToken(foundRefreshToken.getId())) // Redis 에 저장된 RefreshToken 정보를 기반으로 AccessToken 생성
                 .map(accessToken -> signMapper.signInAccessEntityToDto(accessToken)) // 매핑
-                .orElseThrow(ExpiredJwtException::new);
+                .orElseThrow(ForbiddenException::new);
     }
 }
