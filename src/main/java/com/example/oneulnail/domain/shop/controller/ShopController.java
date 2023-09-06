@@ -5,8 +5,13 @@ import com.example.oneulnail.domain.shop.dto.response.ShopListResDto;
 import com.example.oneulnail.domain.shop.dto.response.ShopFindOneResDto;
 import com.example.oneulnail.domain.shop.dto.response.ShopRegisterResDto;
 import com.example.oneulnail.domain.shop.service.ShopService;
+
 import com.example.oneulnail.global.response.ResultCode;
 import com.example.oneulnail.global.response.ResultResponse;
+
+import com.example.oneulnail.global.constants.S3Upload;
+import com.example.oneulnail.global.entity.BaseResponse;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +20,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Tag(name = "네일샵")
 @RestController
@@ -23,11 +31,15 @@ import org.springframework.web.bind.annotation.*;
 public class ShopController {
 
     private final ShopService shopService;
+    private final S3Upload s3Upload;
 
     @Operation(summary = "가게 등록")
     @PostMapping
-    public ResponseEntity<ResultResponse> register(@RequestBody ShopRegisterReqDto shopRegisterReqDto) {
-        ShopRegisterResDto shopRegisterResDto = shopService.register(shopRegisterReqDto);
+    public ResponseEntity<ResultResponse> register(
+            @RequestPart(value = "shopRegisterReq") ShopRegisterReqDto shopRegisterReqDto,
+            @RequestPart(value = "image", required = false) MultipartFile file) throws IOException {
+        String imageUrl = s3Upload.upload(file);
+        ShopRegisterResDto shopRegisterResDto = shopService.register(shopRegisterReqDto,imageUrl);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.SHOP_CREATE_SUCCESS, shopRegisterResDto));
     }
 

@@ -4,8 +4,13 @@ import com.example.oneulnail.domain.post.dto.request.PostRegisterReqDto;
 import com.example.oneulnail.domain.post.dto.response.PostInfoResDto;
 import com.example.oneulnail.domain.post.dto.response.PostRegisterResDto;
 import com.example.oneulnail.domain.post.service.PostService;
+
 import com.example.oneulnail.global.response.ResultCode;
 import com.example.oneulnail.global.response.ResultResponse;
+
+import com.example.oneulnail.global.constants.S3Upload;
+import com.example.oneulnail.global.entity.BaseResponse;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +19,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Tag(name = "게시글")
 @RestController
@@ -23,10 +31,16 @@ public class PostController {
 
     private final PostService postService;
 
+    private final S3Upload s3Upload;
+
     @Operation(summary = "게시글 등록")
     @PostMapping
-    public ResponseEntity<ResultResponse> register(@RequestBody PostRegisterReqDto postRegisterReqDto) {
-        PostRegisterResDto postRegisterResDto = postService.register(postRegisterReqDto);
+    public ResponseEntity<ResultResponse> register(
+            @RequestPart(value = "postRegisterReq") PostRegisterReqDto postRegisterReqDto,
+            @RequestPart(value = "image", required = false) MultipartFile file
+            ) throws IOException {
+        String imageUrl = s3Upload.upload(file);
+        PostRegisterResDto postRegisterResDto = postService.register(postRegisterReqDto,imageUrl);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.POST_CREATE_SUCCESS, postRegisterResDto));
     }
 

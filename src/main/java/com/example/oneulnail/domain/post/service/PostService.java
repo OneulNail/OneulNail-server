@@ -25,20 +25,19 @@ public class PostService {
     private final PostMapper postMapper;
 
     @Transactional
-    public PostRegisterResDto register(PostRegisterReqDto postRegisterReqDto) {
+    public PostRegisterResDto register(PostRegisterReqDto postRegisterReqDto, String imageUrl) {
         Shop foundShop = shopService.findById(postRegisterReqDto.getShopId());
-        Post newPost = buildPost(postRegisterReqDto, foundShop);
-
+        Post newPost = buildPost(postRegisterReqDto, foundShop,imageUrl);
         return saveAndReturnResponse(newPost);
     }
 
-    private Post buildPost(PostRegisterReqDto postRegisterReqDto, Shop shop) {
+    private Post buildPost(PostRegisterReqDto postRegisterReqDto, Shop shop,String imageUrl) {
         return Post.builder()
                 .shop(shop)
                 .name(postRegisterReqDto.getName())
                 .location(shop.getLocation())
                 .likeCount(0)
-                .imgUrl(postRegisterReqDto.getImgUrl())
+                .imgUrl(imageUrl)
                 .price(postRegisterReqDto.getPrice())
                 .content(postRegisterReqDto.getContent())
                 .category(postRegisterReqDto.getCategory())

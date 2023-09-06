@@ -29,6 +29,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.hibernate:hibernate-core'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis'
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 	annotationProcessor 'org.projectlombok:lombok'
 

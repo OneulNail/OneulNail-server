@@ -82,7 +82,6 @@ public class SignService {
         String refreshToken = jwtService.resolveRefreshToken(httpServletRequest);
 
         return Optional.ofNullable(refreshToken)
-                .filter(jwtService::isTokenValid) // RTK 유효성 확인
                 .map(redisRepository::findByRefreshToken) // Redis에서 RefreshToken 찾기
                 .map(foundRefreshToken -> jwtService.createAccessToken(foundRefreshToken.getId())) // Redis 에 저장된 RefreshToken 정보를 기반으로 AccessToken 생성
                 .map(accessToken -> signMapper.signInAccessEntityToDto(accessToken)) // 매핑
