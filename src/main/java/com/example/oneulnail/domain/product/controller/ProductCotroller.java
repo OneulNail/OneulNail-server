@@ -9,12 +9,10 @@ import com.example.oneulnail.global.response.ResultCode;
 import com.example.oneulnail.global.response.ResultResponse;
 
 import com.example.oneulnail.global.constants.S3Upload;
-import com.example.oneulnail.global.entity.BaseResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

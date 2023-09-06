@@ -1,5 +1,7 @@
 package com.example.oneulnail.global.config;
 
+import com.example.oneulnail.global.config.security.jwt.exception.JwtAccessDeniedHandler;
+import com.example.oneulnail.global.config.security.jwt.exception.JwtAuthenticationEntryPoint;
 import com.example.oneulnail.global.config.security.jwt.filter.JwtAuthenticationProcessingFilter;
 import com.example.oneulnail.global.config.security.jwt.service.JwtService;
 import com.example.oneulnail.global.config.security.login.filter.CustomJsonUsernamePasswordAuthenticationFilter;
@@ -38,6 +40,8 @@ public class SecurityConfig {
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -52,7 +56,11 @@ public class SecurityConfig {
                 .csrf().disable() // csrf 보안 사용 X
                 .headers().frameOptions().disable()
                 .and()
-
+                
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)  // 403 (권한이 없는 사용자)
+                .accessDeniedHandler(jwtAccessDeniedHandler)            // 401 (인증되지 않은 사용자)
+                .and()
                 // 세션 사용하지 않으므로 STATELESS로 설정
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
@@ -63,9 +71,7 @@ public class SecurityConfig {
 
                 // 아이콘, css, js 관련
                 // 기본 페이지, css, image, js 하위 폴더에 있는 자료들은 모두 접근 가능, h2-console에 접근 가능
-                .antMatchers("/**").permitAll()
                 .antMatchers("/","/css/**","/images/**","/js/**","/favicon.ico","/h2-console/**").permitAll()
-                .antMatchers("/**").permitAll()
                 .antMatchers("/user/sign-up","/user/sign-in").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/swagger-ui/index.html", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()

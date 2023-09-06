@@ -10,14 +10,12 @@ import com.example.oneulnail.domain.shop.mapper.ShopMapper;
 import com.example.oneulnail.domain.shop.repository.ShopRepository;
 
 import com.example.oneulnail.global.constants.S3Upload;
-import com.example.oneulnail.global.exception.NotFoundException;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 

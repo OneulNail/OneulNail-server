@@ -9,7 +9,6 @@ import com.example.oneulnail.global.response.ResultCode;
 import com.example.oneulnail.global.response.ResultResponse;
 
 import com.example.oneulnail.global.constants.S3Upload;
-import com.example.oneulnail.global.entity.BaseResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
