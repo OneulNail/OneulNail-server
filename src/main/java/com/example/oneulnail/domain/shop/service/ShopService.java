@@ -10,7 +10,7 @@ import com.example.oneulnail.domain.shop.mapper.ShopMapper;
 import com.example.oneulnail.domain.shop.repository.ShopRepository;
 
 import com.example.oneulnail.global.constants.S3Upload;
-import com.example.oneulnail.global.exception.NotFoundException;
+//import com.example.oneulnail.global.exception.NotFoundException;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
