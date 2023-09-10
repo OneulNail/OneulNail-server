@@ -47,6 +47,7 @@ public enum ResultCode {
     RESERVATION_CREATE_SUCCESS("R001", "예약 생성 성공"),
     GET_ALL_RESERVATION_BY_SHOP_SUCCESS("R002", "가게별 예약 조회 성공"),
     GET_ALL_RESERVATION_SUCCESS("R003", "예약 전체 조회 성공"),
+    GET_AVAILABLE_TIME_SLOTS_SUCCESS("R004", "예약 가능 시간대 조회 성공"),
 
     // Shop
     SHOP_CREATE_SUCCESS("S001", "가게 등록 성공"),

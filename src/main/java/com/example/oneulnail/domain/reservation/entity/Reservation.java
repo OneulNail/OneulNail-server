@@ -24,6 +24,8 @@ public class Reservation extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime date;
 
+
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

@@ -4,6 +4,7 @@ package com.example.oneulnail.domain.reservation.controller;
 import com.example.oneulnail.domain.reservation.dto.request.ReservationRegisterReqDto;
 import com.example.oneulnail.domain.reservation.dto.response.ReservationInfoResDto;
 import com.example.oneulnail.domain.reservation.dto.response.ReservationRegisterResDto;
+import com.example.oneulnail.domain.reservation.entity.TimeSlot;
 import com.example.oneulnail.domain.reservation.service.ReservationService;
 import com.example.oneulnail.domain.user.entity.User;
 import com.example.oneulnail.global.annotation.LoginUser;
@@ -16,8 +17,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.xml.transform.Result;
+import java.time.LocalDate;
+import java.util.List;
 
 @Tag(name = "예약")
 @RestController
@@ -56,4 +62,18 @@ public class ReservationController {
         Slice<ReservationInfoResDto> reservationInfoResDtoList = reservationService.findAll(pageable);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.GET_ALL_RESERVATION_SUCCESS, reservationInfoResDtoList));
     }
+
+    @Operation(summary = "예약 가능한 시간대 조회")
+    @GetMapping
+    public ResponseEntity<ResultResponse> getAvailableTimeSlots(
+            @PathVariable Long shopId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate selectedDate){
+
+        List<TimeSlot> availableTimeSlots = reservationService.getAvailableTimeSlots(shopId, selectedDate);
+
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.GET_AVAILABLE_TIME_SLOTS_SUCCESS, availableTimeSlots));
+
+    }
+
+
 }
