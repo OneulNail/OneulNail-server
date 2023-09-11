@@ -19,6 +19,8 @@ public class ReservationMapper {
         return ReservationInfoResDto.builder()
                 .reservationId(reservation.getId())
                 .date(reservation.getDate())
+                .startTime(reservation.getStartTime())
+                .endTime(reservation.getEndTime())
                 .build();
     }
 }
