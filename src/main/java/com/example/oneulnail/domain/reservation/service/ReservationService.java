@@ -37,6 +37,17 @@ public class ReservationService {
         return saveReservation(newReservation, foundUser, foundShop);
     }
 
+    @Transactional
+    public boolean isReservationOverlap(ReservationRegisterReqDto reservationRegisterReqDto){
+        List<Reservation> overlappingReservations = reservationRepository.findOverlappingReservations(
+                reservationRegisterReqDto.getShopId(),
+                reservationRegisterReqDto.getDate(),
+                reservationRegisterReqDto.getStartTime(),
+                reservationRegisterReqDto.getEndTime());
+        overlappingReservations.forEach(reservation -> System.out.println(reservation));
+        return !overlappingReservations.isEmpty();
+    }
+
     @Transactional(readOnly = true)
     public Slice<ReservationInfoResDto> findReservationsByShopId(Long shopId, Pageable pageable) {
         Slice<Reservation> reservations = reservationRepository.findReservationsByShopIdSlice(shopId, pageable);
@@ -51,6 +62,8 @@ public class ReservationService {
     private Reservation buildReservation(ReservationRegisterReqDto reservationRegisterReqDto, User user, Shop shop){
         return Reservation.builder()
                 .date(reservationRegisterReqDto.getDate())
+                .startTime(reservationRegisterReqDto.getStartTime())
+                .endTime(reservationRegisterReqDto.getEndTime())
                 .user(user)
                 .shop(shop)
                 .build();
@@ -62,29 +75,27 @@ public class ReservationService {
     }
 
     @Transactional(readOnly = true)
-    public List<TimeSlot> getAvailableTimeSlots(Long shopId, LocalDate selectedDate) {
-        List<Reservation> reservations = reservationRepository.findByShopIdAndDate(shopId, selectedDate);
-
-        List<TimeSlot> availableTimeSlots = calculateAvailableTimeSlots(reservations, selectedDate);
-
-        return availableTimeSlots;
+    public Slice<ReservationInfoResDto> getAvailableTimeSlots(Long shopId, LocalDate selectedDate) {
+        Slice<Reservation> reservations = reservationRepository.findByShopIdAndDate(shopId, selectedDate);
+//        List<TimeSlot> availableTimeSlots = calculateAvailableTimeSlots(reservations, selectedDate);
+        return reservations.map(reservation -> reservationMapper.reservationEntityToReservationInfo(reservation));
     }
 
-    private List<TimeSlot> calculateAvailableTimeSlots(List<Reservation> reservations, LocalDate selectedDate) {
-        List<TimeSlot> allTimeSlots = new ArrayList<>();
-        for (int hour = 9; hour <= 17; hour++) {
-            allTimeSlots.add(new TimeSlot(selectedDate, LocalTime.of(hour, 0), LocalTime.of(hour, 30)));
-            allTimeSlots.add(new TimeSlot(selectedDate, LocalTime.of(hour, 30), LocalTime.of(hour + 1, 0)));
-        }
-
-        for (Reservation reservation : reservations) {
-            LocalTime startTime = reservation.getDate().toLocalTime();
-            LocalTime endTime = startTime.plusMinutes(30); // 30분 단위로 가정
-            allTimeSlots.removeIf(timeSlot ->
-                    (timeSlot.getStartTime().equals(startTime) && timeSlot.getEndTime().equals(endTime))
-            );
-        }
-
-        return allTimeSlots;
-    }
+//    private List<TimeSlot> calculateAvailableTimeSlots(List<Reservation> reservations, LocalDate selectedDate) {
+//        List<TimeSlot> allTimeSlots = new ArrayList<>();
+//        for (int hour = 9; hour <= 17; hour++) {
+//            allTimeSlots.add(new TimeSlot(selectedDate, LocalTime.of(hour, 0), LocalTime.of(hour, 30)));
+//            allTimeSlots.add(new TimeSlot(selectedDate, LocalTime.of(hour, 30), LocalTime.of(hour + 1, 0)));
+//        }
+//
+//        for (Reservation reservation : reservations) {
+//            LocalTime startTime = reservation.getDate().toLocalTime();
+//            LocalTime endTime = startTime.plusMinutes(30); // 30분 단위로 가정
+//            allTimeSlots.removeIf(timeSlot ->
+//                    (timeSlot.getStartTime().equals(startTime) && timeSlot.getEndTime().equals(endTime))
+//            );
+//        }
+//
+//        return allTimeSlots;
+//    }
 }

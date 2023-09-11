@@ -37,7 +37,10 @@ public enum ErrorCode {
     USER_NOT_FOUND(400, "U004", "유저를 찾을 수 없음"),
 
     // Auth
-    EXPIRED_JWT_EXCEPTION(401,"AUTH001", "기존 토큰이 만료되었습니다. 토큰을 재발급해주세요.");
+    EXPIRED_JWT_EXCEPTION(401,"AUTH001", "기존 토큰이 만료되었습니다. 토큰을 재발급해주세요."),
+
+    // Reservation
+    RESERVATION_OVERLAP(400,"R001","이미 존재하는 예약시간 입니다.");
 
     private final int status;
     private final String code;
