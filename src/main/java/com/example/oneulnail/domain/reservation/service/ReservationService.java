@@ -15,6 +15,9 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +34,17 @@ public class ReservationService {
         return saveReservation(newReservation, foundUser, foundShop);
     }
 
+    @Transactional
+    public boolean isReservationOverlap(ReservationRegisterReqDto reservationRegisterReqDto){
+        List<Reservation> overlappingReservations = reservationRepository.findOverlappingReservations(
+                reservationRegisterReqDto.getShopId(),
+                reservationRegisterReqDto.getDate(),
+                reservationRegisterReqDto.getStartTime(),
+                reservationRegisterReqDto.getEndTime());
+        overlappingReservations.forEach(reservation -> System.out.println(reservation));
+        return !overlappingReservations.isEmpty();
+    }
+
     @Transactional(readOnly = true)
     public Slice<ReservationInfoResDto> findReservationsByShopId(Long shopId, Pageable pageable) {
         Slice<Reservation> reservations = reservationRepository.findReservationsByShopIdSlice(shopId, pageable);
@@ -45,6 +59,8 @@ public class ReservationService {
     private Reservation buildReservation(ReservationRegisterReqDto reservationRegisterReqDto, User user, Shop shop){
         return Reservation.builder()
                 .date(reservationRegisterReqDto.getDate())
+                .startTime(reservationRegisterReqDto.getStartTime())
+                .endTime(reservationRegisterReqDto.getEndTime())
                 .user(user)
                 .shop(shop)
                 .build();
@@ -53,5 +69,11 @@ public class ReservationService {
     private ReservationRegisterResDto saveReservation(Reservation reservation, User user, Shop shop){
         Reservation savedReservation = reservationRepository.save(reservation);
         return reservationMapper.reservationRegisterEntityToDto(savedReservation, user, shop);
+    }
+
+    @Transactional(readOnly = true)
+    public Slice<ReservationInfoResDto> getAvailableTimeSlots(Long shopId, LocalDate selectedDate) {
+        Slice<Reservation> reservations = reservationRepository.findByShopIdAndDate(shopId, selectedDate);
+        return reservations.map(reservation -> reservationMapper.reservationEntityToReservationInfo(reservation));
     }
 }

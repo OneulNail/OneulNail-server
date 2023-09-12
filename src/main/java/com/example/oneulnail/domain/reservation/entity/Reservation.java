@@ -6,10 +6,12 @@ import com.example.oneulnail.global.entity.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 @NoArgsConstructor
@@ -22,7 +24,12 @@ public class Reservation extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDateTime date;
+    private LocalDate date;
+
+    @Column(nullable = false)
+    private LocalTime startTime;
+
+    private LocalTime endTime;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -33,8 +40,10 @@ public class Reservation extends BaseEntity {
     private Shop shop;
 
     @Builder
-    public Reservation(LocalDateTime date, User user, Shop shop){
+    public Reservation(LocalDate date, LocalTime startTime, LocalTime endTime, User user, Shop shop){
         this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.user = user;
         this.shop = shop;
     }
