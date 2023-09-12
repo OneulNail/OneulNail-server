@@ -4,7 +4,6 @@ import com.example.oneulnail.domain.reservation.dto.request.ReservationRegisterR
 import com.example.oneulnail.domain.reservation.dto.response.ReservationInfoResDto;
 import com.example.oneulnail.domain.reservation.dto.response.ReservationRegisterResDto;
 import com.example.oneulnail.domain.reservation.entity.Reservation;
-import com.example.oneulnail.domain.reservation.entity.TimeSlot;
 import com.example.oneulnail.domain.reservation.mapper.ReservationMapper;
 import com.example.oneulnail.domain.reservation.repository.ReservationRepository;
 import com.example.oneulnail.domain.shop.entity.Shop;
@@ -17,8 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -77,25 +74,6 @@ public class ReservationService {
     @Transactional(readOnly = true)
     public Slice<ReservationInfoResDto> getAvailableTimeSlots(Long shopId, LocalDate selectedDate) {
         Slice<Reservation> reservations = reservationRepository.findByShopIdAndDate(shopId, selectedDate);
-//        List<TimeSlot> availableTimeSlots = calculateAvailableTimeSlots(reservations, selectedDate);
         return reservations.map(reservation -> reservationMapper.reservationEntityToReservationInfo(reservation));
     }
-
-//    private List<TimeSlot> calculateAvailableTimeSlots(List<Reservation> reservations, LocalDate selectedDate) {
-//        List<TimeSlot> allTimeSlots = new ArrayList<>();
-//        for (int hour = 9; hour <= 17; hour++) {
-//            allTimeSlots.add(new TimeSlot(selectedDate, LocalTime.of(hour, 0), LocalTime.of(hour, 30)));
-//            allTimeSlots.add(new TimeSlot(selectedDate, LocalTime.of(hour, 30), LocalTime.of(hour + 1, 0)));
-//        }
-//
-//        for (Reservation reservation : reservations) {
-//            LocalTime startTime = reservation.getDate().toLocalTime();
-//            LocalTime endTime = startTime.plusMinutes(30); // 30분 단위로 가정
-//            allTimeSlots.removeIf(timeSlot ->
-//                    (timeSlot.getStartTime().equals(startTime) && timeSlot.getEndTime().equals(endTime))
-//            );
-//        }
-//
-//        return allTimeSlots;
-//    }
 }

@@ -4,7 +4,6 @@ package com.example.oneulnail.domain.reservation.controller;
 import com.example.oneulnail.domain.reservation.dto.request.ReservationRegisterReqDto;
 import com.example.oneulnail.domain.reservation.dto.response.ReservationInfoResDto;
 import com.example.oneulnail.domain.reservation.dto.response.ReservationRegisterResDto;
-import com.example.oneulnail.domain.reservation.entity.TimeSlot;
 import com.example.oneulnail.domain.reservation.exception.ReservationOverlapException;
 import com.example.oneulnail.domain.reservation.service.ReservationService;
 import com.example.oneulnail.domain.user.entity.User;
@@ -22,9 +21,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.transform.Result;
 import java.time.LocalDate;
-import java.util.List;
 
 @Tag(name = "예약")
 @RestController
@@ -76,6 +73,4 @@ public class ReservationController {
         return ResponseEntity.ok(ResultResponse.of(ResultCode.GET_AVAILABLE_TIME_SLOTS_SUCCESS, availableTime));
 
     }
-
-
 }
