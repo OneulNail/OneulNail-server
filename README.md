@@ -18,11 +18,13 @@ OneulNail
 </br>
 
 
+
 ## System Architecture
 
 <p align="middle" >
-  <img src="https://user-images.githubusercontent.com/106878778/216672026-db5e2668-802d-4118-bc1d-ba9ac8c7536d.png" width=70% >
+  <img width="850" alt="오늘네일 시스템 아키텍처" src="https://github.com/OneulNail/OneulNail-server/assets/106878778/a13937e0-6c7f-488e-8849-d802c1aceb7f">
 </p>
+
 
 <br/>
 
